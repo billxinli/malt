@@ -1,0 +1,416 @@
+html, body {
+	height: 99%;
+}
+
+#container {
+	min-height: 100%;
+}
+
+#map {
+	min-height: 100%;
+}
+
+#background {
+	width: 873px;
+	z-index: 0;
+}
+
+.scotch {
+	text-align: center;
+	font-size: 10px;
+	font-family: 'Open Sans', sans-serif;
+	position: absolute;
+}
+
+.b {
+	color: black;
+}
+
+.w {
+	color: white;
+}
+
+.macallancaskstrength {
+	top: 24px;
+	left: 733px;
+}
+
+.aberlourabunadh {
+	top: 56px;
+	left: 821px;
+}
+
+.macallan18sherry {
+	top: 113px;
+	left: 783px;
+}
+
+.macallan12sherry {
+	top: 132px;
+	left: 726px;
+}
+
+.aberlour12ncf {
+	top: 85px;
+	left: 650px;
+}
+
+.gelnfarclas17 {
+	top: 99px;
+	left: 530px;
+}
+
+.glendronach12 {
+	top: 151px;
+	left: 606px;
+}
+
+.glenfarclas12 {
+	top: 188px;
+	left: 537px;
+}
+
+.glenmorangiequinta {
+	top: 245px;
+	left: 467px;
+}
+
+.auchentoshan3wood {
+	top: 301px;
+	left: 493px;
+}
+
+.glenlivet18 {
+	top: 367px;
+	left: 512px;
+}
+
+.glengoyne10 {
+	top: 334px;
+	left: 594px;
+}
+
+.balveniecaribbean {
+	top: 263px;
+	left: 568px;
+}
+
+.glenmorangielasanta {
+	top: 231px;
+	left: 682px;
+}
+
+.aberlour12dc {
+	top: 198px;
+	left: 734px;
+}
+
+.glenfiddich15 {
+	top: 240px;
+	left: 796px;
+}
+
+.tomatin12 {
+	top: 273px;
+	left: 758px;
+}
+
+.pigsnose {
+	top: 292px;
+	left: 821px;
+}
+
+.glenlivetnadurra {
+	top: 315px;
+	left: 707px;
+}
+
+.highlandpark15 {
+	top: 400px;
+	left: 460px;
+}
+
+.oban18 {
+	top: 382px;
+	left: 589px;
+}
+
+.glenlivet15 {
+	top: 390px;
+	left: 703px;
+}
+
+.glenfiddich12 {
+	top: 430px;
+	left: 733px;
+}
+
+.springbank10 {
+	top: 445px;
+	left: 445px;
+}
+
+.oban14 {
+	top: 455px;
+	left: 590px;
+}
+
+.oldpulteney12 {
+	top: 475px;
+	left: 670px;
+}
+
+.glenlivet12 {
+	top: 515px;
+	left: 760px;
+}
+
+.glenmorangienectar {
+	top: 510px;
+	left: 610px;
+}
+
+.deanston12 {
+	top: 545px;
+	left: 540px;
+}
+
+.scapa16 {
+	top: 565px;
+	left: 715px;
+}
+
+.macallan17fo {
+	top: 600px;
+	left: 535px;
+}
+
+.macallan10fo {
+	top: 660px;
+	left: 585px;
+}
+
+.balvenie12dw {
+	top: 638px;
+	left: 740px;
+}
+
+.glenmorangie10o {
+	top: 710px;
+	left: 738px;
+}
+
+.auchentoshanclassic{
+	top: 760px;
+	left: 765px;
+}
+
+.glenkinchie12 {
+	top: 810px;
+	left: 725px;
+}
+
+.dalwhinnie15 {
+	top: 785px;
+	left: 655px;
+}
+
+.tobermory10 {
+	top: 808px;
+	left: 500px;
+}
+
+.bruichladdichrocks {
+	top: 710px;
+	left: 390px;
+}
+
+.ledaig10 {
+	top: 795px;
+	left: 318px;
+}
+
+.bruichladdichladdie {
+	top: 645px;
+	left: 415px;
+}
+
+.glenfiddich18 {
+	top: 538px;
+	left: 430px;
+}
+
+.cragganmore12 {
+	top: 495px;
+	left: 450px;
+}
+
+.highlandpark12 {
+	top: 430px;
+	left: 371px;
+}
+
+.johnniewalkerblack {
+	top: 620px;
+	left: 315px;
+}
+
+.bowmore12 {
+	top: 685px;
+	left: 230px;
+}
+
+.bruichladdichpc {
+	top: 745px;
+	left: 120px;
+}
+
+.bruichladdichoct {
+	top: 800px;
+	left: 12px;
+}
+
+.kilchomanpeated {
+	top: 673px;
+	left: 70px;
+}
+
+.ardbeg10 {
+	top: 640px;
+	left: 120px;
+}
+
+.blackbottle {
+	top: 609px;
+	left: 226px;
+}
+
+.caolila12 {
+	top: 580px;
+	left: 150px;
+}
+
+.laphroaig10cs {
+	top: 605px;
+	left: 10px;
+}
+
+.laphroaig10 {
+	top: 568px;
+	left: 72px;
+}
+
+.smokehead {
+	top: 540px;
+	left: 232px;
+}
+
+.adrmoretradpeated {
+	top: 490px;
+	left: 245px;
+}
+
+.laphroaig18 {
+	top: 515px;
+	left: 121px;
+}
+
+.laphroaigqc {
+	top: 458px;
+	left: 35px;
+}
+
+.talisker10 {
+	top: 453px;
+	left: 170px;
+}
+
+.balveniepeated {
+	top: 425px;
+	left: 225px;
+}
+
+.benromachpeatsmoke {
+	top: 390px;
+	left: 238px;
+}
+
+.ardbegcorryvreckan {
+	top: 398px;
+	left: 76px;
+}
+
+.lagavulin12 {
+	top: 310px;
+	left: 12px;
+}
+
+.taliskerDE {
+	top: 330px;
+	left: 150px;
+}
+
+.highlandpark18 {
+	top: 350px;
+	left: 335px;
+}
+
+.bunnahabhain12 {
+	top: 300px;
+	left: 200px;
+}
+
+.highlandpark25 {
+	top: 290px;
+	left: 360px;
+}
+
+.lagavulin16 {
+	top: 260px;
+	left: 195px;
+}
+
+.lagavulinDE {
+	top: 245px;
+	left: 85px;
+}
+
+.bunnahahbain18 {
+	top: 205px;
+	left: 170px;
+}
+
+.laphroaigtriplewood {
+	top: 165px;
+	left: 100px;
+}
+
+.ardbeguigeadail {
+	top: 75px;
+	left: 35px;
+}
+
+.bowmoredarkest {
+	top: 100px;
+	left: 220px;
+}
+
+.balvenie15sc {
+	top: 115px;
+	left: 365px;
+}
+
+.balvenie21pw {
+	top: 170px;
+	left: 440px;
+}
+
+.dalmore12 {
+	top: 50px;
+	left: 430px;
+}
+
+.jurasuperstition {
+	top: 15px;
+	left: 345px;
+}
