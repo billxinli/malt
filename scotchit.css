@@ -1,5 +1,6 @@
 html, body {
 	height: 99%;
+	font-family: 'Open Sans', sans-serif;
 }
 
 #container {
@@ -8,17 +9,22 @@ html, body {
 
 #map {
 	min-height: 100%;
+	float: left;
+}
+
+#moreinfo {
+	float: right;
+	width: 650px;
+	display: none;
 }
 
 #background {
-	width: 873px;
 	z-index: 0;
 }
 
 .scotch {
 	text-align: center;
 	font-size: 10px;
-	font-family: 'Open Sans', sans-serif;
 	position: absolute;
 }
 
@@ -30,6 +36,7 @@ html, body {
 	color: white;
 }
 
+/* -- Begin position for each Scotch -- */
 .macallancaskstrength {
 	top: 24px;
 	left: 733px;
@@ -55,7 +62,7 @@ html, body {
 	left: 650px;
 }
 
-.gelnfarclas17 {
+.glenfarclas17 {
 	top: 99px;
 	left: 530px;
 }
