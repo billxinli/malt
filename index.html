@@ -8,15 +8,35 @@
 				var url = window.location.href;
 		        var option = url.match(/option=(.*)/);
 		        if (option !== null) {
-		            $(".infolink ." . option[0]).trigger('click');
+		            $('.infolink .' . option[0]).trigger('click');
 		        }
-				$(".infolink").on('click', function() {
-					$('#moreinfo').show();
+				$('.infolink').on('click', function() {
+					$('#moreinfo').css('display', 'inline-block');
 					$('.info').hide();
 					$('.infolink').removeClass('selected');
 					$(this).removeClass('infolink');
 					$('#' + $(this).prop('class')).show();
 					$(this).addClass('infolink selected');
+				});
+
+				$('#ratinglimit').submit(function(e) {
+					e.preventDefault();
+					var low = $('#lowerrange').val();
+					var	high = $('#upperrange').val();
+					if (low == '') { low = 0 };
+					if (high == '') { high = 100 };
+					$('.rating').each(function() {
+						var rating = parseInt($(this).text(), 10);
+						if (rating > high || rating < low) {
+							$('p.' + this.parentNode.parentNode.id).css('display', 'none');
+						}
+						else {
+							$('p.' + this.parentNode.parentNode.id).css('display', 'block');
+						}
+					});
+				});
+				$('input:reset').on('click', function(e) {
+					$('.scotch').css('display', 'block');
 				});
 			});
 		</script>
@@ -53,218 +73,631 @@
 					<p class="scotch b balveniecaribbean">Balvenie Caribbean<br>Cask</p></a>
 				<a href="#" class="glenmorangielasanta infolink">
 					<p class="scotch b glenmorangielasanta">Glenmorangie<br>Lasanta</p></a>
-				<a href="" title="">
+				<a href="#" class="aberlour12dc infolink">
 					<p class="scotch b aberlour12dc">Aberlour 12<br>Double Cask</p></a>
-				<a href="" title="">
+				<a href="#" class="glenfiddich15 infolink">
 					<p class="scotch b glenfiddich15">Glenfiddich 15</p></a>
-				<a href="" title="">
+				<a href="#" class="tomatin12 infolink">
 					<p class="scotch b tomatin12">Tomatin 12</p></a>
-				<a href="" title="">
+				<a href="#" class="pigsnose infolink">
 					<p class="scotch b pigsnose">Pigs Nose</p></a>
-				<a href="" title="">
+				<a href="#" class="glenlivetnadurra infolink">
 					<p class="scotch b glenlivetnadurra">Glenlivet<br>Nadurra</p></a>
-				<a href="" title="">
+				<a href="#" class="highlandpark15 infolink">
 					<p class="scotch b highlandpark15">Highland Park 15</p></a>
-				<a href="" title="">
+				<a href="#" class="oban18 infolink">
 					<p class="scotch b oban18">Oban 18</p></a>
-				<a href="" title="">
+				<a href="#" class="glenlivet15 infolink">
 					<p class="scotch b glenlivet15">Glenlivet 15</p></a>
-				<a href="" title="">
+				<a href="#" class="glenfiddich12 infolink">
 					<p class="scotch b glenfiddich12">Glenfiddich 12</p></a>
-				<a href="" title="">
+				<a href="#" class="springbank10 infolink">
 					<p class="scotch b springbank10">Springbank 10</p></a>
-				<a href="" title="">
+				<a href="#" class="oban14 infolink">
 					<p class="scotch b oban14">Oban 14</p></a>
-				<a href="" title="">
+				<a href="#" class="oldpulteney12 infolink">
 					<p class="scotch b oldpulteney12">Old Pulteney 12</p></a>
-				<a href="" title="">
+				<a href="#" class="glenlivet12 infolink">
 					<p class="scotch b glenlivet12">Glenlivet 12</p></a>
-				<a href="" title="">
+				<a href="#" class="glenmorangienectar infolink">
 					<p class="scotch b glenmorangienectar">Glenmorangie<br>Nectar D'or</p></a>
-				<a href="" title="">
+				<a href="#" class="deanston12 infolink">
 					<p class="scotch b deanston12">Deanston 12</p></a>
-				<a href="" title="">
+				<a href="#" class="scapa16 infolink">
 					<p class="scotch b scapa16">Scapa 16</p></a>
-				<a href="" title="">
+				<a href="#" class="macallan17fo infolink">
 					<p class="scotch b macallan17fo">Macallan 17<br>Fine Oak</p></a>
-				<a href="" title="">
+				<a href="#" class="macallan10fo infolink">
 					<p class="scotch b macallan10fo">Macallan 10<br>Fine Oak</p></a>
-				<a href="" title="">
+				<a href="#" class="balvenie12dw infolink">
 					<p class="scotch b balvenie12dw">Balvenie 12<br>Double Wood</p></a>
-				<a href="" title="">
+				<a href="#" class="glenmorangie10o infolink">
 					<p class="scotch b glenmorangie10o">Glenmorangie 10<br>Original</p></a>
-				<a href="" title="">
+				<a href="#" class="auchentoshanclassic infolink">
 					<p class="scotch b auchentoshanclassic">Auchentoshan<br>Classic</p></a>
-				<a href="" title="">
+				<a href="#" class="glenkinchie12 infolink">
 					<p class="scotch b glenkinchie12">Glenkinchie 12</p></a>
-				<a href="" title="">
+				<a href="#" class="dalwhinnie15 infolink">
 					<p class="scotch b dalwhinnie15">Dalwhinnie 15</p></a>
-				<a href="" title="">
+				<a href="#" class="tobermory10 infolink">
 					<p class="scotch b tobermory10">Tobermory 10</p></a>
-				<a href="" title="">
+				<a href="#" class="bruichladdichrocks infolink">
 					<p class="scotch b bruichladdichrocks">Bruichladdich<br>Rocks</p></a>
-				<a href="" title="">
+				<a href="#" class="ledaig10 infolink">
 					<p class="scotch w ledaig10">Ledaig 10</p></a>
-				<a href="" title="">
+				<a href="#" class="bruichladdichladdie infolink">
 					<p class="scotch w bruichladdichladdie">Bruichladdich<br>Laddie Ten</p></a>
-				<a href="" title="">
+				<a href="#" class="glenfiddich18 infolink">
 					<p class="scotch w glenfiddich18">Glenfiddich 18</p></a>
-				<a href="" title="">
+				<a href="#" class="cragganmore12 infolink">
 					<p class="scotch w cragganmore12">Cragganmore 12</p></a>
-				<a href="" title="">
+				<a href="#" class="highlandpark12 infolink">
 					<p class="scotch w highlandpark12">Highland Park 12</p></a>
-				<a href="" title="">
+				<a href="#" class="johnniewalkerblack infolink">
 					<p class="scotch w johnniewalkerblack">Johnnie Walker<br>Black</p></a>
-				<a href="" title="">
+				<a href="#" class="bowmore12 infolink">
 					<p class="scotch w bowmore12">Bowmore 12</p></a>
-				<a href="" title="">
+				<a href="#" class="bruichladdichpc infolink">
 					<p class="scotch w bruichladdichpc">Bruichladdich<br>Port Charlotte</p></a>
-				<a href="" title="">
+				<a href="#" class="bruichladdichoct infolink">
 					<p class="scotch w bruichladdichoct">Bruichladdich<br>Octomore</p></a>
-				<a href="" title="">
+				<a href="#" class="kilchomanpeated infolink">
 					<p class="scotch w kilchomanpeated">Kilchoman<br>Peated</p></a>
-				<a href="" title="">
+				<a href="#" class="ardbeg10 infolink">
 					<p class="scotch w ardbeg10">Ardbeg 10</p></a>
-				<a href="" title="">
+				<a href="#" class="blackbottle infolink">
 					<p class="scotch w blackbottle">Black Bottle</p></a>
-				<a href="" title="">
+				<a href="#" class="caolila12 infolink">
 					<p class="scotch w caolila12">Caol Ila 12</p></a>
-				<a href="" title="">
+				<a href="#" class="laphroaig10cs infolink">
 					<p class="scotch w laphroaig10cs">Laphroaig 10<br>Cask Strength</p></a>
-				<a href="" title="">
+				<a href="#" class="laphroaig10 infolink">
 					<p class="scotch w laphroaig10">Laphroaig 10</p></a>
-				<a href="" title="">
+				<a href="#" class="smokehead infolink">
 					<p class="scotch w smokehead">Smokehead</p></a>
-				<a href="" title="">
-					<p class="scotch w adrmoretradpeated">Ardmore Traditional<br>Peated</p></a>
-				<a href="" title="">
+				<a href="#" class="ardmoretradpeated infolink">
+					<p class="scotch w ardmoretradpeated">Ardmore Traditional<br>Peated</p></a>
+				<a href="#" class="laphroaig18 infolink">
 					<p class="scotch w laphroaig18">Laphroaig 18</p></a>
-				<a href="" title="">
+				<a href="#" class="laphroaigqc infolink">
 					<p class="scotch w laphroaigqc">Laphroaig<br>Quarter Cask</p></a>
-				<a href="" title="">
+				<a href="#" class="talisker10 infolink">
 					<p class="scotch w talisker10">Talisker 10</p></a>
-				<a href="" title="">
+				<a href="#" class="balveniepeated infolink">
 					<p class="scotch w balveniepeated">Balvenie Peated</p></a>
-				<a href="" title="">
+				<a href="#" class="benromachpeatsmoke infolink">
 					<p class="scotch w benromachpeatsmoke">Benromach<br>Peat Smoke</p></a>
-				<a href="" title="">
+				<a href="#" class="ardbegcorryvreckan infolink">
 					<p class="scotch w ardbegcorryvreckan">Ardbeg Corryvreckan</p></a>
-				<a href="" title="">
+				<a href="#" class="lagavulin12 infolink">
 					<p class="scotch w lagavulin12">Lagavulin 12</p></a>
-				<a href="" title="">
+				<a href="#" class="taliskerDE infolink">
 					<p class="scotch w taliskerDE">Talisker Distillers<br>Edition</p></a>
-				<a href="" title="">
+				<a href="#" class="highlandpark18 infolink">
 					<p class="scotch w highlandpark18">Highland Park 18</p></a>
-				<a href="" title="">
+				<a href="#" class="bunnahabhain12 infolink">
 					<p class="scotch w bunnahabhain12">Bunnahabhain 12</p></a>
-				<a href="" title="">
+				<a href="#" class="highlandpark25 infolink">
 					<p class="scotch w highlandpark25">Highland Park 25</p></a>
-				<a href="" title="">
+				<a href="#" class="lagavulin16 infolink">
 					<p class="scotch w lagavulin16">Lagavulin 16</p></a>
-				<a href="" title="">
+				<a href="#" class="lagavulinDE infolink">
 					<p class="scotch w lagavulinDE">Lagavulin Distillers<br>Edition</p></a>
-				<a href="" title="">
-					<p class="scotch w bunnahahbain18">Bunnahahbain 18</p></a>
-				<a href="" title="">
+				<a href="#" class="bunnahabain18 infolink">
+					<p class="scotch w bunnahabain18">Bunnahahbain 18</p></a>
+				<a href="#" class="laphroaigtriplewood infolink">
 					<p class="scotch w laphroaigtriplewood">Laphroaig Triplewood</p></a>
-				<a href="" title="">
+				<a href="#" class="ardbeguigeadail infolink">
 					<p class="scotch w ardbeguigeadail">Ardbeg<br>Uigeadail</p></a>
-				<a href="" title="">
+				<a href="#" class="bowmoredarkest infolink">
 					<p class="scotch w bowmoredarkest">Bowmore<br>Darkest</p></a>
-				<a href="" title="">
+				<a href="#" class="balvenie15sc infolink">
 					<p class="scotch w balvenie15sc">Balvenie 15<br>Single Cask</p></a>
-				<a href="" title="">
+				<a href="#" class="balvenie21pw infolink">
 					<p class="scotch w balvenie21pw">Balvenie 21<br>Portwood</p></a>
-				<a href="" title="">
+				<a href="#" class="dalmore12 infolink">
 					<p class="scotch w dalmore12">Dalmore 12</p></a>
-				<a href="" title="">
+				<a href="#" class="jurasuperstition infolink">
 					<p class="scotch w jurasuperstition">Jura Superstition</p></a>
 			</div>
+
+			<form id="ratinglimit" action="#">
+				Show whiskys with ratings:<br>
+				<input type="text" id="lowerrange" value="1"> - <input type="text" id="upperrange" value="100">
+				<br>
+				<input type="submit" value="Apply"><input type="reset" text="Reset">
+			</form>
 
 			<!-- Begin Section for "More Information" area -->
 			<div id="moreinfo">
 				<div class="info" id="macallancaskstrength">
-					<h3>Macallan Cask Strength</h3>
-					<p>Average Rating: 91<br>
+					<h2>Macallan Cask Strength</h2>
+					<p>Average Rating: <span class="rating">91</span><br>
 						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Macallan%20Sherry%20Cask%20Strength&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
 					</p>
 				</div>
 				<div class="info" id="aberlourabunadh">
-					<h3>Aberlour Abunadh</h3>
-					<p>Average Rating: 90<br>
+					<h2>Aberlour A'bunadh</h2>
+					<p>Average Rating: <span class="rating">90</span><br>
 						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Aberlour%20A'bunadh%20batch%20%2339&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+						<br>
+						<a href="http://www.reddit.com/r/Scotch/comments/15trsb/aberlour_abunadh_community_review/">Community Review</a>
 					</p>
 				</div>
 				<div class="info" id="macallan18sherry">
-					<h3>Macallan 18 Sherry</h3>
-					<p>Average Rating: 92<br>
+					<h2>Macallan 18 Sherry</h2>
+					<p>Average Rating: <span class="rating">92</span><br>
 						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Macallan%2018%20Sherry&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
 					</p>
 				</div>
 				<div class="info" id="macallan12sherry">
-					<h3>Macallan 12 Sherry</h3>
-					<p>Average Rating: 83<br>
+					<h2>Macallan 12 Sherry</h2>
+					<p>Average Rating: <span class="rating">83</span><br>
 						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Macallan%2012%20Sherry&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+						<br>
+						<a href="http://www.reddit.com/r/Scotch/comments/o1zv6/community_review_2_the_macallan_12_year_old/">Community Review</a>
 					</p>
 				</div>
 				<div class="info" id="aberlour12ncf">
-					<h3>Aberlour 12 Non-Chill Filtered</h3>
-					<p>Average Rating: 92<br>
+					<h2>Aberlour 12 Non-Chill Filtered</h2>
+					<p>Average Rating: <span class="rating">92</span><br>
 						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Aberlour%2012%20Non%20Chill%20Filtered&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
 					</p>
 				</div>
 				<div class="info" id="glenfarclas17">
-					<h3>Glenfarclas 17</h3>
-					<p>Average Rating: 92<br>
+					<h2>Glenfarclas 17</h2>
+					<p>Average Rating: <span class="rating">92</span><br>
 						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenfarclas%2017&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
 					</p>
 				</div>
 				<div class="info" id="glendronach12">
-					<h3>Glendronach 12</h3>
-					<p>Average Rating: 90<br>
+					<h2>Glendronach 12</h2>
+					<p>Average Rating: <span class="rating">90</span><br>
 						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glendronach%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
 					</p>
 				</div>
 				<div class="info" id="glenfarclas12">
-					<h3>Glenfarclas 12</h3>
-					<p>Average Rating: 85<br>
+					<h2>Glenfarclas 12</h2>
+					<p>Average Rating: <span class="rating">85</span><br>
 						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenfarclas%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
 					</p>
 				</div>
 				<div class="info" id="glenmorangiequinta">
-					<h3>Glenmorangie Quinta Ruban</h3>
-					<p>Average Rating: 85<br>
+					<h2>Glenmorangie Quinta Ruban</h2>
+					<p>Average Rating: <span class="rating">85</span><br>
 						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenmorangie%20Quinta%20Ruban&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
 					</p>
 				</div>
 				<div class="info" id="auchentoshan3wood">
-					<h3>Auchentoshan Threewood</h3>
-					<p>Average Rating: 83<br>
+					<h2>Auchentoshan Threewood</h2>
+					<p>Average Rating: <span class="rating">83</span><br>
 						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Auchentoshan%20Three%20Wood&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
 					</p>
 				</div>
 				<div class="info" id="glenlivet18">
-					<h3>Glenlivet 18</h3>
-					<p>Average Rating: 86<br>
+					<h2>Glenlivet 18</h2>
+					<p>Average Rating: <span class="rating">86</span><br>
 						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenlivet%2018&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
 					</p>
 				</div>
 				<div class="info" id="glengoyne10">
-					<h3>Glengoyne 10</h3>
-					<p>Average Rating: 77<br>
+					<h2>Glengoyne 10</h2>
+					<p>Average Rating: <span class="rating">77</span><br>
 						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glengoyne%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
 					</p>
 				</div>
 				<div class="info" id="balveniecaribbean">
-					<h3>Balvenie Caribbean Cask</h3>
-					<p>Average Rating: 86<br>
+					<h2>Balvenie Caribbean Cask</h2>
+					<p>Average Rating: <span class="rating">86</span><br>
 						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2014%20Caribbean%20Cask&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
 					</p>
 				</div>
 				<div class="info" id="glenmorangielasanta">
-					<h3>Glenmorangie Lasanta</h3>
-					<p>Average Rating: 77<br>
+					<h2>Glenmorangie Lasanta</h2>
+					<p>Average Rating: <span class="rating">77</span><br>
 						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenmorangie%20Lasanta&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="aberlour12dc">
+					<h2>Aberlour 12 Double Cask</h2>
+					<p>Average Rating: <span class="rating">85</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Aberlour%2012%20Double%20Cask%20Matured&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="glenfiddich15">
+					<h2>Glenfiddich 15</h2>
+					<p>Average Rating: <span class="rating">84</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenfiddich%2015&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="tomatin12">
+					<h2>Tomatin 12</h2>
+					<p>Average Rating: <span class="rating">72</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Tomatin%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="pigsnose">
+					<h2>Pig's Nose</h2>
+					<p>Average Rating: <span class="rating">79</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Pig's%20Nose&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="glenlivetnadurra">
+					<h2>Glenlivet Nadurra</h2>
+					<p>Average Rating: <span class="rating">86</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenlivet%2016%20Nadurra&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="highlandpark15">
+					<h2>Highland Park 15</h2>
+					<p>Average Rating: <span class="rating">89</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Highland%20Park%2015&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="oban18">
+					<h2>Oban 18</h2>
+					<p>Average Rating: <span class="rating">92</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Oban%2018&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="glenlivet15">
+					<h2>Glenlivet 15</h2>
+					<p>Average Rating: <span class="rating">82</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenlivet%2015%20French%20Oak%20Reserve&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="glenfiddich12">
+					<h2>Glenfiddich 12</h2>
+					<p>Average Rating: <span class="rating">77</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenfiddich%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="springbank10">
+					<h2>Springbank 10</h2>
+					<p>Average Rating: <span class="rating">85</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Springbank%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+						<br>
+						<a href="http://www.reddit.com/r/Scotch/comments/zc3a3/community_review_10_springbank_10/">Community Review</a>
+					</p>
+				</div>
+				<div class="info" id="oban14">
+					<h2>Oban 14</h2>
+					<p>Average Rating: <span class="rating">84</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Oban%2014&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="oldpulteney12">
+					<h2>Old Pulteney 12</h2>
+					<p>Average Rating: <span class="rating">84</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Old%20Pulteney%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+						<br>
+						<a href="http://www.reddit.com/r/Scotch/comments/19p98x/community_review_16_old_pulteney_12_please_note/">Community Review</a>
+					</p>
+				</div>
+				<div class="info" id="glenlivet12">
+					<h2>Glenlivet 12</h2>
+					<p>Average Rating: <span class="rating">78</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenlivet%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+						<br>
+						<a href="http://www.reddit.com/r/Scotch/comments/mvlv3/rscotch_community_review_number_1_glenlivet_12/">Community Review</a>
+					</p>
+				</div>
+				<div class="info" id="glenmorangienectar">
+					<h2>Glenmorangie Nectar D'Or</h2>
+					<p>Average Rating: <span class="rating">83</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenmorangie%20Nectar%20D'Or&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="deanston12">
+					<h2>Deanston 12</h2>
+					<p>Average Rating: <span class="rating">76</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Deanston%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="scapa16">
+					<h2>Scapa 16</h2>
+					<p>Average Rating: <span class="rating">83</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Scapa%2016&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="macallan17fo">
+					<h2>Macallan 17 Fine Oak</h2>
+					<p>Average Rating: <span class="rating">91</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Macallan%2017%20Fine%20Oak&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="macallan10fo">
+					<h2>Macallan 10 Fine Oak</h2>
+					<p>Average Rating: <span class="rating">82</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Macallan%2010%20Fine%20Oak&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="balvenie12dw">
+					<h2>Balvenie 12 Doublewood</h2>
+					<p>Average Rating: <span class="rating">81</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2012%20Doublewood&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+						<br>
+						<a href="http://www.reddit.com/r/Scotch/comments/rpcgy/community_review_5_the_balvenie_12_year_double/">Community Review</a>
+					</p>
+				</div>
+				<div class="info" id="glenmorangie10o">
+					<h2>Glenmorangie 10 Original</h2>
+					<p>Average Rating: <span class="rating">82</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenmorangie%20Original%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+						<br>
+						<a href="http://www.reddit.com/r/Scotch/comments/t1egf/community_review_6_glenmorangie_10_yr_old_the/">Community Review</a>
+					</p>
+				</div>
+				<div class="info" id="auchentoshanclassic">
+					<h2>Auchentoshan Classic</h2>
+					<p>Average Rating: <span class="rating">75</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Auchentoshan%20Classic&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="glenkinchie12">
+					<h2>Glenkinchie 12</h2>
+					<p>Average Rating: <span class="rating">78</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenkinchie%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="dalwhinnie15">
+					<h2>Dalwhinnie 15</h2>
+					<p>Average Rating: <span class="rating">83</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Dalwhinnie%2015&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="tobermory10">
+					<h2>Tobermory 10</h2>
+					<p>Average Rating: <span class="rating">84</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Tobermory%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="bruichladdichrocks">
+					<h2>Bruichladdich Rocks</h2>
+					<p>Average Rating: <span class="rating">83</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bruichladdich%20Rocks&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="ledaig10">
+					<h2>Ledaig 10</h2>
+					<p>Average Rating: <span class="rating">84</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Ledaig%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="bruichladdichladdie">
+					<h2>Bruichladdich The Laddie 10</h2>
+					<p>Average Rating: <span class="rating">88</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bruichladdich%20The%20Laddie%20Ten&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+						<br>
+						<a href="http://www.reddit.com/r/Scotch/comments/10rbnw/the_laddie_10_a_community_review/">Community Review</a>
+					</p>
+				</div>
+				<div class="info" id="glenfiddich18">
+					<h2>Glenfiddich 18</h2>
+					<p>Average Rating: <span class="rating">86</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenfiddich%2018&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="cragganmore12">
+					<h2>Cragganmore 12</h2>
+					<p>Average Rating: <span class="rating">79</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Cragganmore%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="highlandpark12">
+					<h2>Highland Park 12</h2>
+					<p>Average Rating: <span class="rating">85</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Highland%20Park%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+						<br>
+						<a href="http://www.reddit.com/r/Scotch/comments/pekis/community_review_3_highland_park_12_year">Community Review</a>
+					</p>
+				</div>
+				<div class="info" id="johnniewalkerblack">
+					<h2>Johnnie Walker Black</h2>
+					<p>Average Rating: <span class="rating">80</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Johnnie%20Walker%20Black%20Label&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="bowmore12">
+					<h2>Bowmore 12</h2>
+					<p>Average Rating: <span class="rating">76</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bowmore%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="bruichladdichpc">
+					<h2>Bruichladdich Port Charlotte</h2>
+					<p>Average Rating: <span class="rating">93</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bruichladdich%20Port%20Charlotte%207&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="bruichladdichoct">
+					<h2>Bruichladdich Octomore</h2>
+					<p>Average Rating: <span class="rating">92</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bruichladdich%20Octomore%205.1&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="kilchomanpeated">
+					<h2>Kilchoman Peated</h2>
+					<p>Average Rating: --<br>
+						<a href="#">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="ardbeg10">
+					<h2>Ardbeg 10</h2>
+					<p>Average Rating: <span class="rating">87</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Ardbeg%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="blackbottle">
+					<h2>Black Bottle</h2>
+					<p>Average Rating: <span class="rating">80</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Black%20Bottle&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="caolila12">
+					<h2>Caol Ila 12</h2>
+					<p>Average Rating: <span class="rating">84</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Caol%20Ila%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="laphroaig10cs">
+					<h2>Laphroaig 10 Cask Strength</h2>
+					<p>Average Rating: <span class="rating">91</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Laphroaig%2010%20Cask%20Strength&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="laphroaig10">
+					<h2>Laphroaig 10</h2>
+					<p>Average Rating: <span class="rating">85</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Laphroaig%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+						<br>
+						<a href="http://www.reddit.com/r/Scotch/comments/qctib/community_review_4_laphroaig_10/">Community Review</a>
+					</p>
+				</div>
+				<div class="info" id="smokehead">
+					<h2>Smokehead</h2>
+					<p>Average Rating: <span class="rating">78</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Smokehead&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="ardmoretradpeated">
+					<h2>Ardmore Traditional Cask Peated</h2>
+					<p>Average Rating: <span class="rating">81</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Ardmore%20Traditional%20Cask%20Peated&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="laphroaig18">
+					<h2>Laphroaig 18</h2>
+					<p>Average Rating: <span class="rating">90</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Laphroaig%2018&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="laphroaigqc">
+					<h2>Laphroaig Quarter Cask</h2>
+					<p>Average Rating: <span class="rating">91</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Laphroaig%20Quarter%20Cask&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="talisker10">
+					<h2>Talisker 10</h2>
+					<p>Average Rating: <span class="rating">87</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Talisker%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+						<br>
+						<a href="http://www.reddit.com/r/Scotch/comments/uevy2/talisker_10_community_review/">Community Review</a>
+					</p>
+				</div>
+				<div class="info" id="balveniepeated">
+					<h2>Balvenie 17 Peated Cask</h2>
+					<p>Average Rating: <span class="rating">91</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2017%20Peated%20Cask&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="benromachpeatsmoke">
+					<h2>Benromach Peat Smoke</h2>
+					<p>Average Rating: <span class="rating">88</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Benromach%20Peat%20Smoke&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="ardbegcorryvreckan">
+					<h2>Ardbeg Corryvreckan</h2>
+					<p>Average Rating: <span class="rating">92</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Ardbeg%20Corryvreckan&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="lagavulin12">
+					<h2>Lagavulin 12</h2>
+					<p>Average Rating: <span class="rating">93</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Lagavulin%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="taliskerDE">
+					<h2>Talisker Distiller's Edition</h2>
+					<p>Average Rating: <span class="rating">91</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Talisker%20Distiller's%20Edition&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="highlandpark18">
+					<h2>Highland Park 18</h2>
+					<p>Average Rating: <span class="rating">88</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Highland%20Park%2018&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="bunnahabhain12">
+					<h2>Bunnahabhain 12</h2>
+					<p>Average Rating: <span class="rating">86</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bunnahabhain%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+						<br>
+						<a href="http://www.reddit.com/r/Scotch/comments/17xe9w/community_review_bunnahabhain_12/">Community Review</a>
+					</p>
+				</div>
+				<div class="info" id="highlandpark25">
+					<h2>Highland Park 25</h2>
+					<p>Average Rating: <span class="rating">91</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Highland%20Park%2025&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="lagavulin16">
+					<h2>Lagavulin 16</h2>
+					<p>Average Rating: <span class="rating">89</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Lagavulin%2016&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+						<br>
+						<a href="http://www.reddit.com/r/Scotch/comments/xi368/community_review_9_lagavulin_16/">Community Review</a>
+					</p>
+				</div>
+				<div class="info" id="lagavulinDE">
+					<h2>Lagavulin Distiller's Edition</h2>
+					<p>Average Rating: <span class="rating">91</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Lagavulin%201995%20Distillers%20Edition&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="bunnahabain18">
+					<h2>Bunnahahbain 18</h2>
+					<p>Average Rating: <span class="rating">91</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bunnahabhain%2018&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="laphroaigtriplewood">
+					<h2>Laphroaig Triplewood</h2>
+					<p>Average Rating: <span class="rating">89</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Laphroaig%20Triplewood&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="ardbeguigeadail">
+					<h2>Ardbeg Uigeadail</h2>
+					<p>Average Rating: <span class="rating">93</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Ardbeg%20Uigeadail&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+						<br>
+						<a href="http://www.reddit.com/r/Scotch/comments/1bl03s/community_review_17_ardbeg_uigeadail/">Community Review</a>
+					</p>
+				</div>
+				<div class="info" id="bowmoredarkest">
+					<h2>Bowmore Darkest</h2>
+					<p>Average Rating: <span class="rating">72</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bowmore%20Darkest&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="balvenie15sc">
+					<h2>Balvenie 15 Single Barrel</h2>
+					<p>Average Rating: <span class="rating">89</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2015%20Single%20Barrel&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="balvenie21pw">
+					<h2>Balvenie 21 Portwood</h2>
+					<p>Average Rating: <span class="rating">89</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2021%20Portwood&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="dalmore12">
+					<h2>Dalmore 12</h2>
+					<p>Average Rating: <span class="rating">79</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Dalmore%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+					</p>
+				</div>
+				<div class="info" id="jurasuperstition">
+					<h2>Jura Superstition</h2>
+					<p>Average Rating: <span class="rating">77</span><br>
+						<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Jura%20Superstition&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
 					</p>
 				</div>
 			</div>

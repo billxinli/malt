@@ -3,6 +3,10 @@ html, body {
 	font-family: 'Open Sans', sans-serif;
 }
 
+h2 {
+	text-align: center;
+}
+
 #container {
 	min-height: 100%;
 }
@@ -13,9 +17,10 @@ html, body {
 }
 
 #moreinfo {
-	float: right;
-	width: 650px;
 	display: none;
+	margin-left: 70px;
+	margin-top: 40px;
+	width: 300px;
 }
 
 #background {
@@ -34,6 +39,18 @@ html, body {
 
 .w {
 	color: white;
+}
+
+#ratinglimit {
+	display: inline-block;
+	margin-left: 70px;
+	width: 300px;
+	text-align: center;
+}
+
+#lowerrange, #upperrange {
+	width: 30px;
+	text-align: center;
 }
 
 /* -- Begin position for each Scotch -- */
@@ -312,7 +329,7 @@ html, body {
 	left: 232px;
 }
 
-.adrmoretradpeated {
+.ardmoretradpeated {
 	top: 490px;
 	left: 245px;
 }
@@ -382,7 +399,7 @@ html, body {
 	left: 85px;
 }
 
-.bunnahahbain18 {
+.bunnahabain18 {
 	top: 205px;
 	left: 170px;
 }
