@@ -69,6 +69,10 @@ h2 {
 	text-align: center;
 }
 
+img.wordcloud {
+	width: 400px;
+}
+
 /* -- Begin position for each Scotch -- */
 .macallancaskstrength {
 	top: 24px;
