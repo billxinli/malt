@@ -38,6 +38,10 @@
 				$('input:reset').on('click', function(e) {
 					$('.scotch').css('display', 'block');
 				});
+
+				$('#close').on('click', function() {
+					$('#moreinfo').css('display', 'none');
+				});
 			});
 		</script>
 	</head>
@@ -211,6 +215,7 @@
 				
 				<!-- Begin Section for "More Information" area -->
 				<div id="moreinfo">
+					<p id="close">Close</p>
 					<div class="info" id="macallancaskstrength">
 						<h2>Macallan Cask Strength</h2>
 						<p>Average Rating: <span class="rating">91</span><br>
@@ -284,7 +289,9 @@
 					<div class="info" id="auchentoshan3wood">
 						<h2>Auchentoshan Threewood</h2>
 						<p>Average Rating: <span class="rating">83</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Auchentoshan%20Three%20Wood&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Auchentoshan%20Three%20Wood&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/zYSBlpF.png" target="_blank"><img src="http://i.imgur.com/zYSBlpF.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="glenlivet18">
@@ -304,7 +311,9 @@
 					<div class="info" id="balveniecaribbean">
 						<h2>Balvenie Caribbean Cask</h2>
 						<p>Average Rating: <span class="rating">86</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2014%20Caribbean%20Cask&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2014%20Caribbean%20Cask&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/n7gaL3V.png" target="_blank"><img src="http://i.imgur.com/n7gaL3V.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="glenmorangielasanta">
@@ -486,7 +495,9 @@
 					<div class="info" id="bruichladdichrocks">
 						<h2>Bruichladdich Rocks</h2>
 						<p>Average Rating: <span class="rating">83</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bruichladdich%20Rocks&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bruichladdich%20Rocks&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/2Xm30Io.png" target="_blank"><img src="http://i.imgur.com/2Xm30Io.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="ledaig10">
@@ -536,19 +547,25 @@
 					<div class="info" id="bowmore12">
 						<h2>Bowmore 12</h2>
 						<p>Average Rating: <span class="rating">76</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bowmore%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bowmore%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/0yTUlka.png" target="_blank"><img src="http://i.imgur.com/0yTUlka.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="bruichladdichpc">
 						<h2>Bruichladdich Port Charlotte</h2>
 						<p>Average Rating: <span class="rating">93</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bruichladdich%20Port%20Charlotte%207&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bruichladdich%20Port%20Charlotte%207&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/qLqoIrQ.png" target="_blank"><img src="http://i.imgur.com/qLqoIrQ.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="bruichladdichoct">
 						<h2>Bruichladdich Octomore</h2>
 						<p>Average Rating: <span class="rating">92</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bruichladdich%20Octomore%205.1&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bruichladdich%20Octomore%205.1&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/HadfcBu.png" target="_blank"><img src="http://i.imgur.com/HadfcBu.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="kilchomanpeated">
@@ -568,13 +585,17 @@
 					<div class="info" id="blackbottle">
 						<h2>Black Bottle</h2>
 						<p>Average Rating: <span class="rating">80</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Black%20Bottle&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Black%20Bottle&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/geyKEvv.png" target="_blank"><img src="http://i.imgur.com/geyKEvv.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="caolila12">
 						<h2>Caol Ila 12</h2>
 						<p>Average Rating: <span class="rating">84</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Caol%20Ila%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Caol%20Ila%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/wrdg7hW.png" target="_blank"><img src="http://i.imgur.com/wrdg7hW.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="laphroaig10cs">
@@ -600,7 +621,9 @@
 					<div class="info" id="ardmoretradpeated">
 						<h2>Ardmore Traditional Cask Peated</h2>
 						<p>Average Rating: <span class="rating">81</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Ardmore%20Traditional%20Cask%20Peated&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Ardmore%20Traditional%20Cask%20Peated&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/2Ds7rTC.png" target="_blank"><img src="http://i.imgur.com/2Ds7rTC.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="laphroaig18">
@@ -628,19 +651,25 @@
 					<div class="info" id="balveniepeated">
 						<h2>Balvenie 17 Peated Cask</h2>
 						<p>Average Rating: <span class="rating">91</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2017%20Peated%20Cask&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2017%20Peated%20Cask&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/9MuFHX2.png" target="_blank"><img src="http://i.imgur.com/9MuFHX2.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="benromachpeatsmoke">
 						<h2>Benromach Peat Smoke</h2>
 						<p>Average Rating: <span class="rating">88</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Benromach%20Peat%20Smoke&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Benromach%20Peat%20Smoke&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/Rp7ott3.png" target="_blank"><img src="http://i.imgur.com/Rp7ott3.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="ardbegcorryvreckan">
 						<h2>Ardbeg Corryvreckan</h2>
 						<p>Average Rating: <span class="rating">92</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Ardbeg%20Corryvreckan&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Ardbeg%20Corryvreckan&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/NpMjA3u.png" target="_blank"><img src="http://i.imgur.com/NpMjA3u.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="lagavulin12">
@@ -694,7 +723,9 @@
 					<div class="info" id="bunnahabain18">
 						<h2>Bunnahahbain 18</h2>
 						<p>Average Rating: <span class="rating">91</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bunnahabhain%2018&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bunnahabhain%2018&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/vcHX5tz.png" target="_blank"><img src="http://i.imgur.com/vcHX5tz.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="laphroaigtriplewood">
@@ -716,19 +747,23 @@
 					<div class="info" id="bowmoredarkest">
 						<h2>Bowmore Darkest</h2>
 						<p>Average Rating: <span class="rating">72</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bowmore%20Darkest&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bowmore%2015%20Darkest&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
 						</p>
 					</div>
 					<div class="info" id="balvenie15sc">
 						<h2>Balvenie 15 Single Barrel</h2>
 						<p>Average Rating: <span class="rating">89</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2015%20Single%20Barrel&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2015%20Single%20Barrel&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/Z50atlq.png" target="_blank"><img src="http://i.imgur.com/Z50atlq.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="balvenie21pw">
 						<h2>Balvenie 21 Portwood</h2>
 						<p>Average Rating: <span class="rating">89</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2021%20Portwood&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
+							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2021%20Portwood&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
+							Word Cloud (click to enlarge):<br>
+							<a href="http://i.imgur.com/4aDhH96.png" target="_blank"><img src="http://i.imgur.com/4aDhH96.png" class="wordcloud"></a>
 						</p>
 					</div>
 					<div class="info" id="dalmore12">

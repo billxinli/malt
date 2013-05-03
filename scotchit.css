@@ -37,7 +37,18 @@ h2 {
 	display: none;
 	margin-left: 70px;
 	margin-top: 40px;
-	width: 300px;
+	width: 400px;
+}
+
+#close {
+	font-size: 10px;
+	float: right;
+	margin: 0;
+	padding-right: 10px;
+}
+
+#close:hover {
+	cursor: pointer;
 }
 
 #background {
