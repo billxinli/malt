@@ -59,6 +59,7 @@ h2 {
 	text-align: center;
 	font-size: 10px;
 	position: absolute;
+	font-weight: bold;
 }
 
 .b {
@@ -468,4 +469,9 @@ img.wordcloud {
 .jurasuperstition {
 	top: 15px;
 	left: 345px;
+}
+
+.chivasregal {
+	top: 575px;
+	left: 430px;
 }
