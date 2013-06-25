@@ -8,7 +8,7 @@ h2 {
 }
 
 #container {
-	min-height: 100%;
+	min-height: 1027px;
 	display: table;
 	width: 100%;
 }
@@ -30,7 +30,14 @@ h2 {
 
 #map {
 	min-height: 100%;
-	float: left;
+	background: url('back4.png') no-repeat;
+	min-width: 1035px;
+}
+
+#movable {
+	position: relative;
+	left: 57px;
+	top: 70px;
 }
 
 #moreinfo {
