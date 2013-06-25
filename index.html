@@ -11,6 +11,7 @@
 		            $('.infolink .' . option[0]).trigger('click');
 		        }
 				$('.infolink').on('click', function() {
+					event.preventDefault();
 					$('#moreinfo').css('display', 'inline-block');
 					$('.info').hide();
 					$('.infolink').removeClass('selected');
