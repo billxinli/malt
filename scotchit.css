@@ -29,7 +29,7 @@ h2 {
 }
 
 #map {
-	min-height: 100%;
+	height: 1035px;
 	background: url('back4.png') no-repeat;
 	min-width: 1035px;
 }
