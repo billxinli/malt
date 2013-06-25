@@ -90,6 +90,7 @@ h2 {
 
 img.wordcloud {
 	width: 400px;
+	border: 0;
 }
 
 /* -- Begin position for each Scotch -- */

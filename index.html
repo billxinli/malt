@@ -10,7 +10,7 @@
 		        if (option !== null) {
 		            $('.infolink .' . option[0]).trigger('click');
 		        }
-				$('.infolink').on('click', function() {
+				$('.infolink').on('click', function(event) {
 					event.preventDefault();
 					$('#moreinfo').css('display', 'inline-block');
 					$('.info').hide();
