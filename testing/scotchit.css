@@ -9,8 +9,12 @@ h2 {
 
 #container {
 	min-height: 1027px;
+	display: table;
 	width: 100%;
-	white-space: nowrap;
+}
+
+#container > div {
+	display: table-cell;
 }
 
 #sidebar form {
@@ -18,28 +22,13 @@ h2 {
 }
 
 #sidebar {
-	display: inline-block;
-	white-space: nowrap;
-	width: 440px;
+	display: table;
+	width: 100%;
 	height: 100%;
 	vertical-align: top;
 }
 
-#sidebar > * {
-	margin: 0 auto;
-}
-
-#pricevrating {
-	display: block;
-}
-
-#priceChart {
-	display: none;
-}
-
 #map {
-	display: inline-block;
-	white-space: normal;
 	height: 1035px;
 	background: url('back4.png') no-repeat;
 	min-width: 1035px;
@@ -53,20 +42,9 @@ h2 {
 
 #moreinfo {
 	display: none;
+	margin-left: 70px;
 	margin-top: 40px;
 	width: 400px;
-}
-
-#info {
-	clear: both;
-}
-
-#info p {
-	margin: 0;
-}
-
-.showOnMap, #close:hover, .scotch, .getReviews {
-	cursor: pointer;
 }
 
 #close {
@@ -74,6 +52,10 @@ h2 {
 	float: right;
 	margin: 0;
 	padding-right: 10px;
+}
+
+#close:hover {
+	cursor: pointer;
 }
 
 #background {
@@ -85,8 +67,6 @@ h2 {
 	font-size: 10px;
 	position: absolute;
 	font-weight: 600;
-	max-width: 80px;
-	width: auto;
 }
 
 .b {
@@ -97,26 +77,10 @@ h2 {
 	color: white;
 }
 
-#ratinglimit, #regionSelect {
+#ratinglimit {
+	margin-left: 70px;
 	width: 300px;
 	text-align: center;
-}
-
-#regionSelect {
-	margin: 15px auto;
-}
-
-#regionSelect > label {
-	font-size: 13px;
-	margin-left: 15px;
-}
-
-#regionSelect p {
-	margin-bottom: 0;
-}
-
-#regionSelect input {
-	vertical-align: middle;
 }
 
 #lowerrange, #upperrange {
@@ -125,46 +89,8 @@ h2 {
 }
 
 img.wordcloud {
-	max-width: 400px;
-	max-height: 500px;
+	width: 400px;
 	border: 0;
-}
-
-#backgroundFade {
-	background: rgba(0,0,0,0.4);
-}
-
-/* -- Styling for table -- */
-#reviewList {
-	display: none;
-	z-index: 99;
-	position: absolute;
-	top: 75px;
-	left: 0;
-	right: 0;
-	font-size: 13px;
-}
-
-#backgroundFade {
-	display: none;
-	position: fixed;
-	top: 0;
-	left: 0;
-	height: 100%;
-	width: 100%;
-	cursor: pointer;
-}
-
-#whiskyReviews_wrapper {
-	display: table;
-	background: white;
-	margin: 0 auto;
-	padding: 10px;
-	width: 75%;
-}
-
-#whiskyReviews_length {
-	display: none;
 }
 
 /* -- Begin position for each Scotch -- */
@@ -175,22 +101,22 @@ img.wordcloud {
 
 .aberlourabunadh {
 	top: 56px;
-	left: 802px;
+	left: 821px;
 }
 
 .macallan18sherry {
 	top: 113px;
-	left: 773px;
+	left: 783px;
 }
 
 .macallan12sherry {
 	top: 132px;
-	left: 716px;
+	left: 726px;
 }
 
 .aberlour12ncf {
 	top: 85px;
-	left: 645px;
+	left: 650px;
 }
 
 .glenfarclas17 {
@@ -210,12 +136,12 @@ img.wordcloud {
 
 .glenmorangiequinta {
 	top: 245px;
-	left: 460px;
+	left: 467px;
 }
 
 .auchentoshan3wood {
 	top: 301px;
-	left: 486px;
+	left: 493px;
 }
 
 .glenlivet18 {
@@ -230,17 +156,17 @@ img.wordcloud {
 
 .balveniecaribbean {
 	top: 263px;
-	left: 574px;
+	left: 568px;
 }
 
 .glenmorangielasanta {
 	top: 231px;
-	left: 677px;
+	left: 682px;
 }
 
 .aberlour12dc {
-	top: 194px;
-	left: 724px;
+	top: 198px;
+	left: 734px;
 }
 
 .glenfiddich15 {
@@ -260,12 +186,12 @@ img.wordcloud {
 
 .glenlivetnadurra {
 	top: 315px;
-	left: 692px;
+	left: 707px;
 }
 
 .highlandpark15 {
 	top: 400px;
-	left: 459px;
+	left: 460px;
 }
 
 .oban18 {
@@ -274,8 +200,8 @@ img.wordcloud {
 }
 
 .glenlivet15 {
-	top: 383px;
-	left: 691px;
+	top: 390px;
+	left: 703px;
 }
 
 .glenfiddich12 {
@@ -305,7 +231,7 @@ img.wordcloud {
 
 .glenmorangienectar {
 	top: 510px;
-	left: 605px;
+	left: 610px;
 }
 
 .deanston12 {
@@ -320,27 +246,27 @@ img.wordcloud {
 
 .macallan17fo {
 	top: 600px;
-	left: 525px;
+	left: 535px;
 }
 
 .macallan10fo {
 	top: 660px;
-	left: 575px;
+	left: 585px;
 }
 
 .balvenie12dw {
 	top: 638px;
-	left: 732px;
+	left: 740px;
 }
 
 .glenmorangie10o {
 	top: 710px;
-	left: 735px;
+	left: 738px;
 }
 
 .auchentoshanclassic{
 	top: 760px;
-	left: 761px;
+	left: 765px;
 }
 
 .glenkinchie12 {
@@ -360,7 +286,7 @@ img.wordcloud {
 
 .bruichladdichrocks {
 	top: 710px;
-	left: 380px;
+	left: 390px;
 }
 
 .ledaig10 {
@@ -370,7 +296,7 @@ img.wordcloud {
 
 .bruichladdichladdie {
 	top: 645px;
-	left: 408px;
+	left: 415px;
 }
 
 .glenfiddich18 {
@@ -385,12 +311,12 @@ img.wordcloud {
 
 .highlandpark12 {
 	top: 430px;
-	left: 370px;
+	left: 371px;
 }
 
 .johnniewalkerblack {
 	top: 620px;
-	left: 310px;
+	left: 315px;
 }
 
 .bowmore12 {
@@ -400,17 +326,17 @@ img.wordcloud {
 
 .bruichladdichpc {
 	top: 745px;
-	left: 114px;
+	left: 120px;
 }
 
 .bruichladdichoct {
 	top: 800px;
-	left: 5px;
+	left: 12px;
 }
 
 .kilchomanpeated {
 	top: 673px;
-	left: 56px;
+	left: 70px;
 }
 
 .ardbeg10 {
@@ -430,7 +356,7 @@ img.wordcloud {
 
 .laphroaig10cs {
 	top: 605px;
-	left: 4px;
+	left: 10px;
 }
 
 .laphroaig10 {
@@ -444,8 +370,8 @@ img.wordcloud {
 }
 
 .ardmoretradpeated {
-	top: 487px;
-	left: 255px;
+	top: 490px;
+	left: 245px;
 }
 
 .laphroaig18 {
@@ -455,7 +381,7 @@ img.wordcloud {
 
 .laphroaigqc {
 	top: 458px;
-	left: 27px;
+	left: 35px;
 }
 
 .talisker10 {
@@ -465,17 +391,17 @@ img.wordcloud {
 
 .balveniepeated {
 	top: 425px;
-	left: 221px;
+	left: 225px;
 }
 
 .benromachpeatsmoke {
 	top: 390px;
-	left: 227px;
+	left: 238px;
 }
 
 .ardbegcorryvreckan {
-	top: 395px;
-	left: 85px;
+	top: 398px;
+	left: 76px;
 }
 
 .lagavulin12 {
@@ -484,23 +410,23 @@ img.wordcloud {
 }
 
 .taliskerDE {
-	top: 325px;
+	top: 330px;
 	left: 150px;
 }
 
 .highlandpark18 {
-	top: 348px;
-	left: 336px;
+	top: 350px;
+	left: 335px;
 }
 
 .bunnahabhain12 {
-	top: 298px;
+	top: 300px;
 	left: 200px;
 }
 
 .highlandpark25 {
-	top: 288px;
-	left: 358px;
+	top: 290px;
+	left: 360px;
 }
 
 .lagavulin16 {
@@ -509,38 +435,38 @@ img.wordcloud {
 }
 
 .lagavulinDE {
-	top: 241px;
-	left: 93px;
+	top: 245px;
+	left: 85px;
 }
 
 .bunnahabhain18 {
-	top: 203px;
-	left: 167px;
+	top: 205px;
+	left: 170px;
 }
 
 .laphroaigtriplewood {
-	top: 160px;
-	left: 111px;
+	top: 165px;
+	left: 100px;
 }
 
 .ardbeguigeadail {
 	top: 75px;
-	left: 17px;
+	left: 35px;
 }
 
 .bowmoredarkest {
 	top: 100px;
-	left: 210px;
+	left: 220px;
 }
 
 .balvenie15sc {
 	top: 115px;
-	left: 355px;
+	left: 365px;
 }
 
 .balvenie21pw {
 	top: 170px;
-	left: 428px;
+	left: 440px;
 }
 
 .dalmore12 {
@@ -549,11 +475,11 @@ img.wordcloud {
 }
 
 .jurasuperstition {
-	top: 11px;
-	left: 342px;
+	top: 15px;
+	left: 345px;
 }
 
 .chivasregal {
 	top: 575px;
-	left: 423px;
+	left: 430px;
 }
