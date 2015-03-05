@@ -260,7 +260,8 @@
 										'textShadow': '0px 0px 6px black, 0px 0px 3px black'
 									},
 									formatter: function() {
-										return $("#chart-wrapper").height() >= 800 ? this.point.name : "";
+										//return $("#chart-wrapper").height() >= 800 ? this.point.name : "";
+										return this.point.name;
 									}
 								}
 							},
