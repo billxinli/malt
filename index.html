@@ -3,864 +3,660 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<link href='http://fonts.googleapis.com/css?family=Montserrat|Open+Sans:400,600' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="scotchit.css">
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+		<link rel="stylesheet" href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
+		<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+		<script src="/papaparse/papaparse.min.js"></script>
+		<script src="http://code.highcharts.com/highcharts.js" type="text/javascript"></script>
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<script type="text/javascript" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
 		<script type="text/javascript">
+			google.load("visualization", "1", {packages:["table"]});
 			$(function() {
-				var url = window.location.href;
-		        var option = url.match(/option=(.*)/);
-		        if (option !== null) {
-		            $('.infolink .' . option[0]).trigger('click');
-		        }
-				$('.infolink').on('click', function(event) {
-					event.preventDefault();
-					$('#moreinfo').css('display', 'inline-block');
-					$('.info').hide();
-					$('.infolink').removeClass('selected');
-					$(this).removeClass('infolink');
-					$('#' + $(this).prop('class')).show();
-					$(this).addClass('infolink selected');
+
+				$("#chart-wrapper").height( $(window).height() - 50 );
+				$("#chart-wrapper").width( $("#chart-wrapper").height() );
+
+				$(window).resize(function() {
+					$("#chart-wrapper").height( $(window).height() - 50 );
+					$("#chart-wrapper").width( $("#chart-wrapper").height() );
+					$("#mapChart").highcharts().redraw();
+					$("#mapChart").highcharts().reflow();
+				})
+
+				var selectedPoint;
+
+				var Whisky = function(name, rating, cloud, price, region){
+					this.Name = name;
+					this.Rating = rating;
+					this.WordCloud = cloud;
+					this.Price = price;
+					this.Region = region;
+				};
+
+				var whiskysList = [
+					["Macallan Sherry Cask Strength", "macallancaskstrength", "http://i.imgur.com/8buv3qa.png", "Speyside", 59, 76],
+					["Aberlour A'bunadh", "aberlourabunadh", "http://i.imgur.com/W1sgU.png?1", "Speyside", 74, 70],
+					["Macallan 18 Sherry", "macallan18sherry", "http://i.imgur.com/NfrDM4S.png", "Speyside", 68, 60],
+					["Macallan 12 Sherry", "macallan12sherry", "http://i.imgur.com/qnKAhT6.png?1", "Speyside", 57, 56],
+					["Aberlour 12 Non Chill Filtered", "aberlour12ncf", "http://i.imgur.com/RTKwnvA.png", "Speyside", 47, 66],
+					["Glenfarclas 17", "glenfarclas17", "http://i.imgur.com/tLhtq8Z.png", "Highland", 23, 64],
+					["Glendronach 12", "glendronach12", "http://i.imgur.com/M6GwSuN.png", "Highland", 38, 54],
+					["Glenfarclas 12", "glenfarclas12", "http://i.imgur.com/fTd6367.png", "Highland", 24, 46],
+					["Glenmorangie Quinta Ruban", "glenmorangiequinta", "http://i.imgur.com/X2Wo7Zi.png", "Highland", 10, 34],
+					["Auchentoshan Three Wood", "auchentoshan3wood", "http://i.imgur.com/zYSBlpF.png", "Lowland", 14, 24],
+					["Glenlivet 18", "glenlivet18", "http://i.imgur.com/STJJ2HH.png", "Speyside", 17, 12],
+					["Glengoyne 10", "glengoyne10", "http://i.imgur.com/G5WUiPY.png", "Highland", 31, 17],
+					["Balvenie 14 Caribbean Cask", "balveniecaribbean", "http://i.imgur.com/n7gaL3V.png", "Speyside", 29, 30],
+					["Glenmorangie Lasanta", "glenmorangielasanta", "http://i.imgur.com/E3pziD3.png", "Highland", 49, 37],
+					["Aberlour 12 Double Cask Matured", "aberlour12dc", "http://i.imgur.com/hCnhVaw.png", "Speyside", 58, 43],
+					["Glenfiddich 15", "glenfiddich15", "http://i.imgur.com/BYQYIKb.png", "Speyside", 73, 37],
+					["Tomatin 12", "tomatin12", "http://i.imgur.com/8W71GUq.png", "Highland", 66, 30],
+					["Pig's Nose", "pigsnose", "http://i.imgur.com/LBlytiu.png", "Other", 74, 27],
+					["Glenlivet 16 Nadurra", "glenlivetnadurra", "http://i.imgur.com/dC7da3e.png", "Speyside", 52, 20],
+					["Highland Park 15", "highlandpark15", "http://i.imgur.com/gGBX9BZ.png", "Island", 9, 6],
+					["Oban 18", "oban18", "http://i.imgur.com/rcrrhpy.png", "Highland", 29, 8],
+					["Glenlivet 15 French Oak Reserve", "glenlivet15", "http://i.imgur.com/FuAOies.png", "Speyside", 52, 7],
+					["Glenfiddich 12", "glenfiddich12", "http://i.imgur.com/gMnClQy.jpg", "Speyside", 59, -1],
+					["Springbank 10", "springbank10", "http://i.imgur.com/fUH3tIz.jpg", "Campbeltown", 4, -3],
+					["Oban 14", "oban14", "http://i.imgur.com/1lJRxYJ.png", "Highland", 29, -6],
+					["Old Pulteney 12", "oldpulteney12", "http://i.imgur.com/jgisRPG.png?1", "Highland", 49, -10],
+					["Glenlivet 12", "glenlivet12", "http://i.imgur.com/ZYL6l8h.png?1", "Speyside", 62, -18],
+					["Glenmorangie Nectar D'Or", "glenmorangienectar", "http://i.imgur.com/scWXCyB.png", "Highland", 35, -18],
+					["Deanston 12", "deanston12", "http://i.imgur.com/w6dYRdD.png?1", "Highland", 23, -22],
+					["Scapa 16", "scapa16", "http://i.imgur.com/1BCRecf.png", "Island", 54, -27],
+					["Macallan 17 Fine Oak", "macallan17fo", "http://i.imgur.com/EMxOOuL.png", "Speyside", 21, -35],
+					["Macallan 10 Fine Oak", "macallan10fo", "http://i.imgur.com/1FIg3Sa.png", "Speyside", 30, -48],
+					["Balvenie 12 Doublewood", "balvenie12dw", "http://i.imgur.com/XQ0cCEe.png", "Speyside", 59, -43],
+					["Glenmorangie Original 10", "glenmorangie10o", "http://i.imgur.com/hODgTl0.png", "Highland", 62, -58],
+					["Auchentoshan Classic", "auchentoshanclassic", "http://i.imgur.com/xmAjLUP.png", "Lowland", 66, -65],
+					["Glenkinchie 12", "glenkinchie12", "http://i.imgur.com/yq8VrCe.png", "Lowland", 59, -75],
+					["Dalwhinnie 15", "dalwhinnie15", "http://i.imgur.com/C1EySTj.png?1", "Speyside", 47, -70],
+					["Tobermory 10", "tobermory10", "http://i.imgur.com/RKnpX0a.jpg", "Island", 14, -74],
+					["Bruichladdich Rocks", "bruichladdichrocks", "http://i.imgur.com/2Xm30Io.png", "Islay", -6, -58],
+					["Ledaig 10", "ledaig10", "http://i.imgur.com/3B8CqOV.png", "Island", -23, -72],
+					["Bruichladdich The Laddie Ten", "bruichladdichladdie", "http://i.imgur.com/QQuIC5w.png", "Islay", -2, -44],
+					["Glenfiddich 18", "glenfiddich18", "http://i.imgur.com/2N9enRW.png", "Speyside", 1, -20],
+					["Cragganmore 12", "cragganmore12", "http://i.imgur.com/NRAm7tJ.png?1", "Speyside", 5, -13],
+					["Highland Park 12", "highlandpark12", "http://i.imgur.com/Sz3a1nq.png?1", "Island", -8, 0],
+					["Johnnie Walker Black Label", "johnniewalkerblack", "http://i.imgur.com/Igs7mQN.png", "Other", -20, -39],
+					["Bowmore 12", "bowmore12", "http://i.imgur.com/0yTUlka.png", "Islay", -38, -52],
+					["Bruichladdich Port Charlotte", "bruichladdichpc", "http://i.imgur.com/qLqoIrQ.png", "Islay", -58, -62],
+					["Bruichladdich Octomore", "bruichladdichoct", "http://i.imgur.com/HadfcBu.png", "Islay", -81, -74],
+					["Kilchoman Peated", "kilchomanpeated", "http://i.imgur.com/NRmufzm.png", "Islay", -71, -50],
+					["Ardbeg 10", "ardbeg10", "http://i.imgur.com/rMP5opn.png", "Islay", -62, -43],
+					["Black Bottle", "blackbottle", "http://i.imgur.com/geyKEvv.png", "Other", -40, -37],
+					["Caol Ila 12", "caolila12", "http://i.imgur.com/wrdg7hW.png", "Islay", -56, -31],
+					["Laphroaig 10 Cask Strength", "laphroaig10cs", "http://i.imgur.com/cJqVlgA.png", "Islay", -82, -37],
+					["Laphroaig 10", "laphroaig10", "http://i.imgur.com/nR0P5dA.png", "Islay", -69, -29],
+					["Smokehead", "smokehead", "http://i.imgur.com/f2ugqKc.png", "Islay", -38, -21],
+					["Ardmore Traditional Cask Peated", "ardmoretradpeated", "http://i.imgur.com/2Ds7rTC.png", "Speyside", -32, -13],
+					["Laphroaig 18", "laphroaig18", "http://i.imgur.com/1qNqH5L.png", "Islay", -60, -17],
+					["Laphroaig Quarter Cask", "laphroaigqc", "http://i.imgur.com/7O4wdij.png", "Islay", -76, -8],
+					["Talisker 10", "talisker10", "http://i.imgur.com/3UWhc99.png", "Island", -51, -6],
+					["Balvenie 17 Peated Cask", "balveniepeated", "http://i.imgur.com/9MuFHX2.png", "Speyside", -38, 0],
+					["Benromach Peat Smoke", "benromachpeatsmoke", "http://i.imgur.com/Rp7ott3.png", "Speyside", -38, 7],
+					["Ardbeg Corryvreckan", "ardbegcorryvreckan", "http://i.imgur.com/NpMjA3u.png", "Islay", -64, 7],
+					["Lagavulin 12", "lagavulin12", "http://i.imgur.com/ON77byY.png", "Islay", -83, 24],
+					["Talisker Distiller's Edition", "taliskerDE", "http://i.imgur.com/aZjBqrj.png", "Island", -52, 18],
+					["Highland Park 18", "highlandpark18", "http://i.imgur.com/fhMbjkC.png", "Island", -15, 14],
+					["Bunnahabhain 12", "bunnahabhain12", "http://i.imgur.com/N8VaZKJ.png?1", "Islay", -43, 25],
+					["Highland Park 25", "highlandpark25", "http://i.imgur.com/8SEmttO.png", "Island", -11, 28],
+					["Lagavulin 16", "lagavulin16", "http://i.imgur.com/bPpXGLU.png", "Islay", -47, 33],
+					["Lagavulin Distiller's Edition", "lagavulinDE", "http://i.imgur.com/n44l4fp.png", "Islay", -63, 35],
+					["Bunnahabhain 18", "bunnahabhain18", "http://i.imgur.com/vcHX5tz.png", "Islay", -50, 44],
+					["Laphroaig Triplewood", "laphroaigtriplewood", "http://i.imgur.com/ELlhae7.png", "Islay", -58, 52],
+					["Ardbeg Uigeadail", "ardbeguigeadail", "http://i.imgur.com/AuquffD.png?1", "Islay", -79, 67],
+					["Bowmore 15 Darkest", "bowmoredarkest", "http://i.imgur.com/P5WN3vq.png", "Islay", -43, 63],
+					["Balvenie 15 Single Barrel", "balvenie15sc", "http://i.imgur.com/Z50atlq.png", "Speyside", -12, 60],
+					["Balvenie 21 Portwood", "balvenie21pw", "http://i.imgur.com/4aDhH96.png", "Speyside", 3, 48],
+					["Dalmore 12", "dalmore12", "http://i.imgur.com/aZbrApI.png", "Highland", 0, 73],
+					["Jura Superstition", "jurasuperstition", "http://i.imgur.com/n88jJZj.png", "Island", -14, 79],
+					["Chivas Regal 12", "chivasregal", "http://i.imgur.com/zV96To0.png", "Other", 0, -29]
+				];
+
+				var scotchDB = '/scotchfile.csv';
+				Papa.parse(scotchDB, {
+					download: true,
+					worker: true,
+					header: true,
+					complete: function(results) {
+						processResults(results);
+					}
 				});
+
+				function processResults(results) {
+					$.each(whiskysList, function(name,variable) {
+						var regex = new RegExp(variable[0], "i");
+						var tempVar = results.data.map(function(i) {
+							if (i["Whisky Name"].match(regex)) {
+								return i;
+							}
+						});
+						tempVar = $.grep(tempVar, function(n){return(n)});
+						window[variable[1]] = new Whisky(variable[0], averageRating(tempVar), variable[2], getPrice(tempVar), variable[3]);
+						$("#movable").append("<p class='scotch " + variable[1] + "'>" + window[variable[1]].Name + "</p>");
+					});
+					$("#movable p").each(function(index,value) {
+						if ( parseFloat($("." + $(this).attr('class').split(' ')[1]).css('left')) <= '450' ) {
+							$(this).addClass('w');
+						}
+					});
+					mapChartInit();
+					//priceChartInit();
+				}
+
+				function averageRating(data) {
+					var total = 0;
+					var count = 0;
+					$.each(data, function(index, value) {
+						if (!isNaN(value["Rating"]) && value["Rating"] != "") {
+							total += parseFloat(value["Rating"]);
+							count++;
+						}
+					})
+					if (total != 0)
+						return Math.round(total / count);
+					else
+						return 0;
+				}
+
+				function getPrice(data) {
+					var total = 0;
+					var count = 0;
+					$.each(data, function(index, value) {
+						if (value["Price"].indexOf('$') != -1 && !value["Price"].match(/\./) && !value["Price"].match(/[a-z]/i) && !value["Price"].match(/\(/) && value["Price"].indexOf("£") == -1 ) {
+							total += parseFloat(value["Price"].replace(/\./g, '').replace(/,/g,'.').replace(/[^\d\.]/g,''));
+							count++;
+						}
+					});
+					if (total != 0)
+						return Math.round(total / count);
+					else
+						return 0;
+				}
+
+				//Map chart initialization--------------------------------------
+
+				function mapChartInit(selected) {
+					var highlandList = new Array();
+					var speysideList = new Array();
+					var islandList = new Array();
+					var islayList = new Array();
+					var otherList = new Array();
+					var lowlandList = new Array();
+					var campbeltownList = new Array();
+
+					$(whiskysList).each(function(key,value) {
+						if (window[value[1]].Rating >= $('#lowerrange').val() && window[value[1]].Rating <= $('#upperrange').val()) {
+							switch(value[3]) {
+								case 'Highland':
+									highlandList.push({'x':value[4], 'y':value[5], 'name':value[0]});
+									break;
+								case 'Speyside':
+									speysideList.push({'x':value[4], 'y':value[5], 'name':value[0]});
+									break;
+								case 'Island':
+									islandList.push({'x':value[4], 'y':value[5], 'name':value[0]});
+									break;
+								case 'Islay':
+									islayList.push({'x':value[4], 'y':value[5], 'name':value[0]});
+									break;
+								case 'Other':
+									otherList.push({'x':value[4], 'y':value[5], 'name':value[0]});
+									break;
+								case 'Lowland':
+									lowlandList.push({'x':value[4], 'y':value[5], 'name':value[0]});
+									break;
+								case 'Campbeltown':
+									campbeltownList.push({'x':value[4], 'y':value[5], 'name':value[0]});
+									break;
+							}
+						}
+					});
+
+					var series = new Array();
+
+
+					$("#mapChart").highcharts({
+						chart: {
+							plotBackgroundImage: 'back4.png',
+							type: 'scatter',
+							className: 'map'
+						},
+						title: {text:''},
+						legend: {enabled: false},
+						xAxis: {
+							title: {text:''},
+							min: -100,
+							max: 100,
+							gridLineWidth: 0,
+							minorGridLineWidth: 0,
+							lineColor: 'transparent',
+							labels: {enabled: false},
+							minorTickLength: 0,
+							tickLength: 0
+						},
+						yAxis: {
+							title: {text:''},
+							min: -100,
+							max: 100,
+							gridLineWidth: 0,
+							minorGridLineWidth: 0,
+							lineColor: 'transparent',
+							labels: {enabled: false},
+							minorTickLength: 0,
+							tickLength: 0
+						},
+						tooltip: {enabled: false},
+						plotOptions: {
+							scatter: {
+								dataLabels: {
+									enabled: true,
+									allowOverlap: true,
+									color: 'white',
+									style: {
+										'fontWeight': 'normal',
+										'fontSize': '10px',
+										'textShadow': '0px 0px 6px black, 0px 0px 3px black'
+									},
+									formatter: function() {
+										//return $("#chart-wrapper").height() >= 800 ? this.point.name : "";
+										return this.point.name;
+									}
+								}
+							},
+							series: {
+								cursor: 'pointer',
+								stickyTracking: false,
+								allowPointSelect: true,
+								marker: {
+									symbol: 'circle',
+									fillColor: 'black',
+									lineColor: 'white',
+									lineWidth: 1
+								},
+								point: {
+									events: {
+										click: function(event) {
+											if (!event.point.selected) {
+												selectedPoint = [event.point.series.index, event.point.index, event.point.name];
+												$('#moreinfo').css('display', 'block');
+												$('#info').empty();
+												$(whiskysList).each(function(key,value) {
+													if (window[value[1]].Name === event.currentTarget.name) {
+														$("#info").html("<h2>" + window[value[1]].Name + "</h2>" + "<p>Average Rating: <span class='rating'>" + window[value[1]].Rating + "</span><p class='getReviews'>Scotchit Reviews</p><p class='showOnMap'>Show on Price vs Rating chart</p>Word Cloud (click to enlarge): <br><a href='" + window[value[1]].WordCloud + "' target='_blank'><img src='" + window[value[1]].WordCloud + "' class='wordcloud'></a>");
+													}
+												});
+											} else {
+												$("#moreinfo").hide();
+											}
+										}
+									}
+								}
+							}
+						},
+						series: [{
+							name: "Highland",
+							data: highlandList
+						}, {
+							name: "Speyside",
+							data: speysideList
+						}, {
+							name: "Island",
+							data: islandList
+						}, {
+							name: "Islay",
+							data: islayList
+						}, {
+							name: "Other",
+							data: otherList
+						}, {
+							name: "Lowland",
+							data: lowlandList
+						}, {
+							name: "Campbeltown",
+							data: campbeltownList
+						}]
+					});
+
+					var chart = $("#mapChart").highcharts();
+					if (selected != undefined) {
+						for(var j=0; j<chart.series[selected[0]].data.length; j++) {
+							if (chart.series[selected[0]].data[j].name == selected[2])
+								chart.series[selected[0]].data[j].select();
+						}
+					}
+
+					var series = $("#mapChart").highcharts().series;
+					$(series).each(function(key,value) {
+						if (!$("input[value='" + value.name + "']").is(":checked")) {
+							value.hide();
+						}
+					});
+				}
+
+				//Price chart initialization------------------------------------
+
+				function priceChartInit(selected) {
+					var highlandList = new Array();
+					var speysideList = new Array();
+					var islandList = new Array();
+					var islayList = new Array();
+					var otherList = new Array();
+					var lowlandList = new Array();
+					var campbeltownList = new Array();
+					var excluded = new Array();
+					$(whiskysList).each(function(key,value) {
+						if (window[value[1]].Rating == 0 || window[value[1]].Price == 0)
+							excluded.push(window[value[1]].Name);
+						else {
+							switch(window[value[1]].Region) {
+								case 'Highland':
+									highlandList.push({'x':window[value[1]].Price, 'y':window[value[1]].Rating, 'name':window[value[1]].Name});
+									break;
+								case 'Speyside':
+									speysideList.push({'x':window[value[1]].Price, 'y':window[value[1]].Rating, 'name':window[value[1]].Name});
+									break;
+								case 'Island':
+									islandList.push({'x':window[value[1]].Price, 'y':window[value[1]].Rating, 'name':window[value[1]].Name});
+									break;
+								case 'Islay':
+									islayList.push({'x':window[value[1]].Price, 'y':window[value[1]].Rating, 'name':window[value[1]].Name});
+									break;
+								case 'Other':
+									otherList.push({'x':window[value[1]].Price, 'y':window[value[1]].Rating, 'name':window[value[1]].Name});
+									break;
+								case 'Lowland':
+									lowlandList.push({'x':window[value[1]].Price, 'y':window[value[1]].Rating, 'name':window[value[1]].Name});
+									break;
+								case 'Campbeltown':
+									campbeltownList.push({'x':window[value[1]].Price, 'y':window[value[1]].Rating, 'name':window[value[1]].Name});
+									break;
+							}
+						}
+							
+					});
+
+					$("#mapChart").highcharts({
+						chart: {
+							type: 'scatter',
+							className: 'price'
+						},
+						title: {
+							text: ''
+						},
+						xAxis: {
+							title: {
+								text: 'Price (USD)'
+							},
+							min: 0
+						},
+						yAxis: {
+							title: {
+								text: 'Rating'
+							}
+						},
+						tooltip: {
+							formatter: function() {
+								var index = this.series.index;
+								return "<b>" + this.key + "</b><br>Price: $" + this.x + "<br>Rating: " + this.y + "<br>";
+							}
+						},
+						plotOptions: {
+							series: {
+								stickyTracking: false,
+								allowPointSelect: true,
+								marker: {
+									states: {
+										select: {
+											enabled: true,
+											radius: 6,
+											fillColor: 'black'
+										}
+									},
+									symbol: 'circle'
+								},
+								point: {
+									events: {
+										click: function(event) {
+											if (!event.point.selected) {
+												selectedPoint = [event.point.series.index, event.point.index, event.point.name];
+												$('#moreinfo').css('display', 'block');
+												$('#info').empty();
+												$(whiskysList).each(function(key,value) {
+													if (window[value[1]].Name === event.currentTarget.name) {
+														$("#info").html("<h2>" + window[value[1]].Name + "</h2>" + "<p>Average Rating: <span class='rating'>" + window[value[1]].Rating + "</span><p class='getReviews'>Scotchit Reviews</p><p class='showOnMap'>Show on Malt Map</p>Word Cloud (click to enlarge): <br><a href='" + window[value[1]].WordCloud + "' target='_blank'><img src='" + window[value[1]].WordCloud + "' class='wordcloud'></a>");
+													}
+												});
+											} else {
+												$("#moreinfo").hide();
+											}
+										}
+									}
+								}
+							}
+						},
+						series: [{
+							name: "Highland",
+							data: highlandList
+						}, {
+							name: "Speyside",
+							data: speysideList
+						}, {
+							name: "Island",
+							data: islandList
+						}, {
+							name: "Islay",
+							data: islayList
+						}, {
+							name: "Other",
+							data: otherList
+						}, {
+							name: "Lowland",
+							data: lowlandList
+						}, {
+							name: "Campbeltown",
+							data: campbeltownList
+						}]
+					});
+
+					var chart = $("#mapChart").highcharts();
+					if (selected != undefined) {
+						for(var j=0; j<chart.series[selected[0]].data.length; j++) {
+							if (chart.series[selected[0]].data[j].name == selected[2])
+								chart.series[selected[0]].data[j].select();
+						}
+					}
+
+					var series = $("#mapChart").highcharts().series;
+					$(series).each(function(key,value) {
+						if (!$("input[value='" + value.name + "']").is(":checked")) {
+							value.hide();
+						}
+					});
+
+					console.log("The following are excluded on the Price chart, because the money and/or rating value are 0:");
+					$(excluded).each(function(key,value) {
+						console.log(value);
+					});
+				}
+
+				function updateChart(region) {
+					var chart = $("#mapChart").highcharts();
+					var series = chart.series;
+					$(series).each(function(key,value) {
+						if (value.name == region) {
+							if (value.visible) {
+								value.hide();
+							} else {
+								value.show();
+							}
+						}
+					});
+				}
+
+				//Make table of whisky reviews
+				function makeTable(list) {
+					var data = new Array();
+					for (var i = 0; i < list.length; i++) {
+						data.push([
+							list[i]['Whisky Name'] != '' ? list[i]['Whisky Name'] : '', 
+							list[i]['Reviewer Username'] != '' ? list[i]['Reviewer Username'] : '', 
+							list[i]['Link To reddit Review'] != '' ? "<a target='_blank' href='" + list[i]['Link To reddit Review'] + "'>" + list[i]['Link To reddit Review'] + "</a>" : '',
+							list[i]['Rating'] != '' ? list[i]['Rating'] : '', 
+							list[i]['Region'] != '' ? list[i]['Region'] : '', 
+							list[i]['Price'] != '' ? list[i]['Price'] : '', 
+							list[i]['Date'] != '' ? list[i]['Date'] : ''
+						]);
+					};
+					$("#whiskyReviews").dataTable({
+						'data': data,
+						'bDeferRender': true,
+						'columns': [
+							{'title': 'Whisky Name'},
+							{'title': 'Reviewer Username'},
+							{'title': 'Link To reddit Review'},
+							{'title': 'Rating'},
+							{'title': 'Region'},
+							{'title': 'Price'},
+							{'title': 'Date'}
+						]
+					});
+					$("#reviewList, #backgroundFade").show();
+				}
+
+				//UI interactions-----------------------------------------
 
 				$('#ratinglimit').submit(function(e) {
 					e.preventDefault();
-					var low = $('#lowerrange').val();
-					var	high = $('#upperrange').val();
-					if (low == '') { low = 0 };
-					if (high == '') { high = 100 };
-					$('.rating').each(function() {
-						var rating = parseInt($(this).text(), 10);
-						if (rating > high || rating < low) {
-							$('p.' + this.parentNode.parentNode.id).css('display', 'none');
-						}
-						else {
-							$('p.' + this.parentNode.parentNode.id).css('display', 'block');
+					mapChartInit();
+					$(".regionToggle").each(function() {
+						if (!this.checked) {
+							$(series).each(function(key,value) {
+								if (value.name == region) {
+									if (value.visible) {
+										value.hide();
+									} else if (value.visible) {
+										value.show();
+									}
+								}
+							});
 						}
 					});
 				});
-				$('input:reset').on('click', function(e) {
-					$('.scotch').css('display', 'block');
+				$('#reset').on('click', function(e) {
+					if ($("#lowerrange").val() != 1 || $("#upperrange").val() != 100) {
+						$("#lowerrange").val("1");
+						$("#upperrange").val("100");
+						mapChartInit();
+					}
 				});
 
 				$('#close').on('click', function() {
 					$('#moreinfo').css('display', 'none');
+					$(".scotch").css('text-decoration', 'none').css('font-size', '10px');
+					if (selectedPoint != undefined)
+						$("#mapChart").highcharts().series[selectedPoint[0]].points[selectedPoint[1]].select(false,false);
 				});
+
+				$("#pricevrating").on('click', function() {
+					$('#moreinfo').hide();
+					if ($("#mapChart").highcharts().options.chart.className == 'map') {
+						$(this).prop('value', "Show Malt Map");
+						$("#ratinglimit > input").prop("disabled", true);
+						priceChartInit();
+					} else {
+						$(this).prop('value', "Show Price vs Rating Chart");
+						$("#ratinglimit > input").prop("disabled", false);
+						mapChartInit();
+					}
+				});
+
+				$("#info").on('click', '.showOnMap', function(e) {
+					e.preventDefault();
+					var clicked = $(this).parent().find("h2").text();
+					if ($("#mapChart").highcharts().options.chart.className == 'map') {
+						$("#pricevrating").prop('value', "Show Malt Map");
+						$(".showOnMap").html("Show on Malt Map<br>");
+						$("#ratinglimit > input").prop("disabled", true);
+						priceChartInit(selectedPoint);
+					} else {
+						$("#pricevrating").prop('value', "Show Price vs Rating Chart");
+						$(".showOnMap").html("Show on Ratings vs Price Chart<br>");
+						$("#ratinglimit > input").prop("disabled", false);
+						mapChartInit(selectedPoint);
+					}
+				});
+
+				$(".regionToggle").change(function() {
+					updateChart($(this).val());
+				});
+
+				$("#info").on('click', '.getReviews', function() {
+					var clicked = $(this).parent().find("h2").text();
+					Papa.parse(scotchDB, {
+						download: true,
+						worker: true,
+						header: true,
+						complete: function(results) {
+							var regex = new RegExp(clicked, "i");
+							var tempVar = results.data.map(function(i) {
+								if (i["Whisky Name"].match(regex)) {
+									return i;
+								}
+							});
+							tempVar = $.grep(tempVar, function(n){return(n)});
+							makeTable(tempVar);
+						}
+					});
+				});
+
+				$("#backgroundFade").on('click', function() {
+					$(this).hide();
+					$("#reviewList").hide();
+					$("#whiskyReviews").dataTable().fnDestroy();
+				});
+
+				$(document).keyup(function(e) {
+					if (e.keyCode == 27) {
+						if ($("#backgroundFade").is(":visible")){
+							$("#backgroundFade, #reviewList").hide();
+							$("#whiskyReviews").dataTable().fnDestroy();
+						}
+					}
+				})
 			});
 		</script>
 	</head>
 	<body>
 		<div id="container">
-			<div id="map">
-				<div id="movable">
-					<a href="#" class="macallancaskstrength infolink">
-						<p class="scotch b macallancaskstrength">Macallan<br>Cask Strength</p></a>
-					<a href="#" class="aberlourabunadh infolink">
-						<p class="scotch b aberlourabunadh">Aberlour<br>Abunadh</p></a>
-					<a href="#" class="macallan18sherry infolink">
-						<p class="scotch b macallan18sherry">Macallan 18<br>Sherry</p></a>
-					<a href="#" class="macallan12sherry infolink">
-						<p class="scotch b macallan12sherry">Macallan 12<br>Sherry</p></a>
-					<a href="#" class="aberlour12ncf infolink">
-						<p class="scotch b aberlour12ncf">Aberlour 12<br>Nonchillfiltered</p></a>
-					<a href="#" class="glenfarclas17 infolink">
-						<p class="scotch b glenfarclas17">Glenfarclas 17</p></a>
-					<a href="#" class="glendronach12 infolink">
-						<p class="scotch b glendronach12">Glendronach 12</p></a>
-					<a href="#" class="glenfarclas12 infolink">
-						<p class="scotch b glenfarclas12">Glenfarclas 12</p></a>
-					<a href="#" class="glenmorangiequinta infolink">
-						<p class="scotch b glenmorangiequinta">Glenmorangie<br>Quinta Ruban</p></a>
-					<a href="#" class="auchentoshan3wood infolink">
-						<p class="scotch b auchentoshan3wood">Auchentoshan<br>Threewood</p></a>
-					<a href="#" class="glenlivet18 infolink">
-						<p class="scotch b glenlivet18">Glenlivet 18</p></a>
-					<a href="#" class="glengoyne10 infolink">
-						<p class="scotch b glengoyne10">Glengoyne 10</p></a>
-					<a href="#" class="balveniecaribbean infolink">
-						<p class="scotch b balveniecaribbean">Balvenie Caribbean<br>Cask</p></a>
-					<a href="#" class="glenmorangielasanta infolink">
-						<p class="scotch b glenmorangielasanta">Glenmorangie<br>Lasanta</p></a>
-					<a href="#" class="aberlour12dc infolink">
-						<p class="scotch b aberlour12dc">Aberlour 12<br>Double Cask</p></a>
-					<a href="#" class="glenfiddich15 infolink">
-						<p class="scotch b glenfiddich15">Glenfiddich 15</p></a>
-					<a href="#" class="tomatin12 infolink">
-						<p class="scotch b tomatin12">Tomatin 12</p></a>
-					<a href="#" class="pigsnose infolink">
-						<p class="scotch b pigsnose">Pigs Nose</p></a>
-					<a href="#" class="glenlivetnadurra infolink">
-						<p class="scotch b glenlivetnadurra">Glenlivet<br>Nadurra</p></a>
-					<a href="#" class="highlandpark15 infolink">
-						<p class="scotch b highlandpark15">Highland Park 15</p></a>
-					<a href="#" class="oban18 infolink">
-						<p class="scotch b oban18">Oban 18</p></a>
-					<a href="#" class="glenlivet15 infolink">
-						<p class="scotch b glenlivet15">Glenlivet 15</p></a>
-					<a href="#" class="glenfiddich12 infolink">
-						<p class="scotch b glenfiddich12">Glenfiddich 12</p></a>
-					<a href="#" class="springbank10 infolink">
-						<p class="scotch b springbank10">Springbank 10</p></a>
-					<a href="#" class="oban14 infolink">
-						<p class="scotch b oban14">Oban 14</p></a>
-					<a href="#" class="oldpulteney12 infolink">
-						<p class="scotch b oldpulteney12">Old Pulteney 12</p></a>
-					<a href="#" class="glenlivet12 infolink">
-						<p class="scotch b glenlivet12">Glenlivet 12</p></a>
-					<a href="#" class="glenmorangienectar infolink">
-						<p class="scotch b glenmorangienectar">Glenmorangie<br>Nectar D'or</p></a>
-					<a href="#" class="deanston12 infolink">
-						<p class="scotch b deanston12">Deanston 12</p></a>
-					<a href="#" class="scapa16 infolink">
-						<p class="scotch b scapa16">Scapa 16</p></a>
-					<a href="#" class="macallan17fo infolink">
-						<p class="scotch b macallan17fo">Macallan 17<br>Fine Oak</p></a>
-					<a href="#" class="macallan10fo infolink">
-						<p class="scotch b macallan10fo">Macallan 10<br>Fine Oak</p></a>
-					<a href="#" class="balvenie12dw infolink">
-						<p class="scotch b balvenie12dw">Balvenie 12<br>Double Wood</p></a>
-					<a href="#" class="glenmorangie10o infolink">
-						<p class="scotch b glenmorangie10o">Glenmorangie 10<br>Original</p></a>
-					<a href="#" class="auchentoshanclassic infolink">
-						<p class="scotch b auchentoshanclassic">Auchentoshan 12</p></a>
-					<a href="#" class="glenkinchie12 infolink">
-						<p class="scotch b glenkinchie12">Glenkinchie 12</p></a>
-					<a href="#" class="dalwhinnie15 infolink">
-						<p class="scotch b dalwhinnie15">Dalwhinnie 15</p></a>
-					<a href="#" class="tobermory10 infolink">
-						<p class="scotch b tobermory10">Tobermory 10</p></a>
-					<a href="#" class="bruichladdichrocks infolink">
-						<p class="scotch b bruichladdichrocks">Bruichladdich<br>Rocks</p></a>
-					<a href="#" class="ledaig10 infolink">
-						<p class="scotch w ledaig10">Ledaig 10</p></a>
-					<a href="#" class="bruichladdichladdie infolink">
-						<p class="scotch w bruichladdichladdie">Bruichladdich<br>Laddie Ten</p></a>
-					<a href="#" class="glenfiddich18 infolink">
-						<p class="scotch w glenfiddich18">Glenfiddich 18</p></a>
-					<a href="#" class="cragganmore12 infolink">
-						<p class="scotch w cragganmore12">Cragganmore 12</p></a>
-					<a href="#" class="highlandpark12 infolink">
-						<p class="scotch w highlandpark12">Highland Park 12</p></a>
-					<a href="#" class="johnniewalkerblack infolink">
-						<p class="scotch w johnniewalkerblack">Johnnie Walker<br>Black</p></a>
-					<a href="#" class="bowmore12 infolink">
-						<p class="scotch w bowmore12">Bowmore 12</p></a>
-					<a href="#" class="bruichladdichpc infolink">
-						<p class="scotch w bruichladdichpc">Bruichladdich<br>Port Charlotte</p></a>
-					<a href="#" class="bruichladdichoct infolink">
-						<p class="scotch w bruichladdichoct">Bruichladdich<br>Octomore</p></a>
-					<a href="#" class="kilchomanpeated infolink">
-						<p class="scotch w kilchomanpeated">Kilchoman<br>Peated</p></a>
-					<a href="#" class="ardbeg10 infolink">
-						<p class="scotch w ardbeg10">Ardbeg 10</p></a>
-					<a href="#" class="blackbottle infolink">
-						<p class="scotch w blackbottle">Black Bottle</p></a>
-					<a href="#" class="caolila12 infolink">
-						<p class="scotch w caolila12">Caol Ila 12</p></a>
-					<a href="#" class="laphroaig10cs infolink">
-						<p class="scotch w laphroaig10cs">Laphroaig 10<br>Cask Strength</p></a>
-					<a href="#" class="laphroaig10 infolink">
-						<p class="scotch w laphroaig10">Laphroaig 10</p></a>
-					<a href="#" class="smokehead infolink">
-						<p class="scotch w smokehead">Smokehead</p></a>
-					<a href="#" class="ardmoretradpeated infolink">
-						<p class="scotch w ardmoretradpeated">Ardmore Traditional<br>Peated</p></a>
-					<a href="#" class="laphroaig18 infolink">
-						<p class="scotch w laphroaig18">Laphroaig 18</p></a>
-					<a href="#" class="laphroaigqc infolink">
-						<p class="scotch w laphroaigqc">Laphroaig<br>Quarter Cask</p></a>
-					<a href="#" class="talisker10 infolink">
-						<p class="scotch w talisker10">Talisker 10</p></a>
-					<a href="#" class="balveniepeated infolink">
-						<p class="scotch w balveniepeated">Balvenie Peated</p></a>
-					<a href="#" class="benromachpeatsmoke infolink">
-						<p class="scotch w benromachpeatsmoke">Benromach<br>Peat Smoke</p></a>
-					<a href="#" class="ardbegcorryvreckan infolink">
-						<p class="scotch w ardbegcorryvreckan">Ardbeg Corryvreckan</p></a>
-					<a href="#" class="lagavulin12 infolink">
-						<p class="scotch w lagavulin12">Lagavulin 12</p></a>
-					<a href="#" class="taliskerDE infolink">
-						<p class="scotch w taliskerDE">Talisker Distillers<br>Edition</p></a>
-					<a href="#" class="highlandpark18 infolink">
-						<p class="scotch w highlandpark18">Highland Park 18</p></a>
-					<a href="#" class="bunnahabhain12 infolink">
-						<p class="scotch w bunnahabhain12">Bunnahabhain 12</p></a>
-					<a href="#" class="highlandpark25 infolink">
-						<p class="scotch w highlandpark25">Highland Park 25</p></a>
-					<a href="#" class="lagavulin16 infolink">
-						<p class="scotch w lagavulin16">Lagavulin 16</p></a>
-					<a href="#" class="lagavulinDE infolink">
-						<p class="scotch w lagavulinDE">Lagavulin Distillers<br>Edition</p></a>
-					<a href="#" class="bunnahabain18 infolink">
-						<p class="scotch w bunnahabain18">Bunnahahbain 18</p></a>
-					<a href="#" class="laphroaigtriplewood infolink">
-						<p class="scotch w laphroaigtriplewood">Laphroaig Triplewood</p></a>
-					<a href="#" class="ardbeguigeadail infolink">
-						<p class="scotch w ardbeguigeadail">Ardbeg<br>Uigeadail</p></a>
-					<a href="#" class="bowmoredarkest infolink">
-						<p class="scotch w bowmoredarkest">Bowmore<br>Darkest</p></a>
-					<a href="#" class="balvenie15sc infolink">
-						<p class="scotch w balvenie15sc">Balvenie 15<br>Single Cask</p></a>
-					<a href="#" class="balvenie21pw infolink">
-						<p class="scotch w balvenie21pw">Balvenie 21<br>Portwood</p></a>
-					<a href="#" class="dalmore12 infolink">
-						<p class="scotch w dalmore12">Dalmore 12</p></a>
-					<a href="#" class="jurasuperstition infolink">
-						<p class="scotch w jurasuperstition">Jura Superstition</p></a>
-					<a href="#" class="chivasregal infolink">
-						<p class="scotch w chivasregal">Chivas Regal</p></a>
-				</div>
+			<div id="chart-wrapper">
+				<div id="mapChart"></div>
 			</div>
-
+			<div id="priceChart"></div>
 			<div id="sidebar">
 				<form id="ratinglimit" action="#">
 					Show whiskys with ratings:<br>
 					<input type="text" id="lowerrange" value="1"> - <input type="text" id="upperrange" value="100">
 					<br>
-					<input type="submit" value="Apply"><input type="reset" text="Reset">
+					<input type="submit" value="Apply"><input type="button" value="Reset" id="reset">
 				</form>
-				
+				<div id="regionSelect">
+					<p>Regions</p>
+					<label><input type="checkbox" class="regionToggle" value="Highland" checked>Highland</label><label><input type="checkbox" class="regionToggle" value="Lowland" checked>Lowland</label><br>
+					<label><input type="checkbox" class="regionToggle" value="Speyside" checked>Speyside</label><label><input type="checkbox" class="regionToggle" value="Other" checked>Other</label><br>
+					<label><input type="checkbox" class="regionToggle" value="Island" checked>Island</label><label><input type="checkbox" class="regionToggle" value="Islay" checked>Islay</label><br>
+					<label><input type="checkbox" class="regionToggle" value="Campbeltown" checked>Campbeltown</label>
+				</div>
+				<input type="button" value="Show Price vs Rating Chart" id="pricevrating" />
 				<!-- Begin Section for "More Information" area -->
 				<div id="moreinfo">
 					<p id="close">Close</p>
-					<div class="info" id="macallancaskstrength">
-						<h2>Macallan Cask Strength</h2>
-						<p>Average Rating: <span class="rating">91</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Macallan%20Sherry%20Cask%20Strength&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/8buv3qa.png" target="_blank"><img src="http://i.imgur.com/8buv3qa.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="aberlourabunadh">
-						<h2>Aberlour A'bunadh</h2>
-						<p>Average Rating: <span class="rating">90</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&hl=en_US&f=true&noheader=false&gid=2">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/W1sgU.png?1" target="_blank"><img src="http://i.imgur.com/W1sgU.png?1" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="macallan18sherry">
-						<h2>Macallan 18 Sherry</h2>
-						<p>Average Rating: <span class="rating">92</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Macallan%2018%20Sherry&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/NfrDM4S.png" target="_blank"><img src="http://i.imgur.com/NfrDM4S.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="macallan12sherry">
-						<h2>Macallan 12 Sherry</h2>
-						<p>Average Rating: <span class="rating">83</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Macallan%2012%20Sherry&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/qnKAhT6.png?1" target="_blank"><img src="http://i.imgur.com/qnKAhT6.png?1" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="aberlour12ncf">
-						<h2>Aberlour 12 Non-Chill Filtered</h2>
-						<p>Average Rating: <span class="rating">92</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Aberlour%2012%20Non%20Chill%20Filtered&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/RTKwnvA.png" target="_blank"><img src="http://i.imgur.com/RTKwnvA.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glenfarclas17">
-						<h2>Glenfarclas 17</h2>
-						<p>Average Rating: <span class="rating">92</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenfarclas%2017&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/tLhtq8Z.png" target="_blank"><img src="http://i.imgur.com/tLhtq8Z.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glendronach12">
-						<h2>Glendronach 12</h2>
-						<p>Average Rating: <span class="rating">90</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glendronach%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/M6GwSuN.png" target="_blank"><img src="http://i.imgur.com/M6GwSuN.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glenfarclas12">
-						<h2>Glenfarclas 12</h2>
-						<p>Average Rating: <span class="rating">85</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenfarclas%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/fTd6367.png" target="_blank"><img src="http://i.imgur.com/fTd6367.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glenmorangiequinta">
-						<h2>Glenmorangie Quinta Ruban</h2>
-						<p>Average Rating: <span class="rating">85</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenmorangie%20Quinta%20Ruban&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/X2Wo7Zi.png" target="_blank"><img src="http://i.imgur.com/X2Wo7Zi.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="auchentoshan3wood">
-						<h2>Auchentoshan Threewood</h2>
-						<p>Average Rating: <span class="rating">83</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Auchentoshan%20Three%20Wood&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/zYSBlpF.png" target="_blank"><img src="http://i.imgur.com/zYSBlpF.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glenlivet18">
-						<h2>Glenlivet 18</h2>
-						<p>Average Rating: <span class="rating">86</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenlivet%2018&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/STJJ2HH.png" target="_blank"><img src="http://i.imgur.com/STJJ2HH.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glengoyne10">
-						<h2>Glengoyne 10</h2>
-						<p>Average Rating: <span class="rating">77</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glengoyne%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/G5WUiPY.png" target="_blank"><img src="http://i.imgur.com/G5WUiPY.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="balveniecaribbean">
-						<h2>Balvenie Caribbean Cask</h2>
-						<p>Average Rating: <span class="rating">86</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2014%20Caribbean%20Cask&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/n7gaL3V.png" target="_blank"><img src="http://i.imgur.com/n7gaL3V.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glenmorangielasanta">
-						<h2>Glenmorangie Lasanta</h2>
-						<p>Average Rating: <span class="rating">77</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenmorangie%20Lasanta&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/E3pziD3.png" target="_blank"><img src="http://i.imgur.com/E3pziD3.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="aberlour12dc">
-						<h2>Aberlour 12 Double Cask</h2>
-						<p>Average Rating: <span class="rating">85</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Aberlour%2012%20Double%20Cask%20Matured&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/hCnhVaw.png" target="_blank"><img src="http://i.imgur.com/hCnhVaw.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glenfiddich15">
-						<h2>Glenfiddich 15</h2>
-						<p>Average Rating: <span class="rating">84</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenfiddich%2015&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/BYQYIKb.png" target="_blank"><img src="http://i.imgur.com/BYQYIKb.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="tomatin12">
-						<h2>Tomatin 12</h2>
-						<p>Average Rating: <span class="rating">72</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Tomatin%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/8W71GUq.png" target="_blank"><img src="http://i.imgur.com/8W71GUq.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="pigsnose">
-						<h2>Pig's Nose</h2>
-						<p>Average Rating: <span class="rating">79</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Pig's%20Nose&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/LBlytiu.png" target="_blank"><img src="http://i.imgur.com/LBlytiu.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glenlivetnadurra">
-						<h2>Glenlivet Nadurra</h2>
-						<p>Average Rating: <span class="rating">86</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenlivet%2016%20Nadurra&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/dC7da3e.png" target="_blank"><img src="http://i.imgur.com/dC7da3e.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="highlandpark15">
-						<h2>Highland Park 15</h2>
-						<p>Average Rating: <span class="rating">89</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Highland%20Park%2015&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/gGBX9BZ.png" target="_blank"><img src="http://i.imgur.com/gGBX9BZ.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="oban18">
-						<h2>Oban 18</h2>
-						<p>Average Rating: <span class="rating">92</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Oban%2018&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/rcrrhpy.png" target="_blank"><img src="http://i.imgur.com/rcrrhpy.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glenlivet15">
-						<h2>Glenlivet 15</h2>
-						<p>Average Rating: <span class="rating">82</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenlivet%2015%20French%20Oak%20Reserve&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/FuAOies.png" target="_blank"><img src="http://i.imgur.com/FuAOies.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glenfiddich12">
-						<h2>Glenfiddich 12</h2>
-						<p>Average Rating: <span class="rating">77</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenfiddich%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/gMnClQy.jpg" target="_blank"><img src="http://i.imgur.com/gMnClQy.jpg" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="springbank10">
-						<h2>Springbank 10</h2>
-						<p>Average Rating: <span class="rating">85</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Springbank%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/fUH3tIz.jpg" target="_blank"><img src="http://i.imgur.com/fUH3tIz.jpg" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="oban14">
-						<h2>Oban 14</h2>
-						<p>Average Rating: <span class="rating">84</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Oban%2014&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/1lJRxYJ.png" target="_blank"><img src="http://i.imgur.com/1lJRxYJ.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="oldpulteney12">
-						<h2>Old Pulteney 12</h2>
-						<p>Average Rating: <span class="rating">84</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Old%20Pulteney%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/jgisRPG.png?1" target="_blank"><img src="http://i.imgur.com/jgisRPG.png?1" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glenlivet12">
-						<h2>Glenlivet 12</h2>
-						<p>Average Rating: <span class="rating">78</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenlivet%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/ZYL6l8h.png?1" target="_blank"><img src="http://i.imgur.com/ZYL6l8h.png?1" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glenmorangienectar">
-						<h2>Glenmorangie Nectar D'Or</h2>
-						<p>Average Rating: <span class="rating">83</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenmorangie%20Nectar%20D'Or&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/scWXCyB.png" target="_blank"><img src="http://i.imgur.com/scWXCyB.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="deanston12">
-						<h2>Deanston 12</h2>
-						<p>Average Rating: <span class="rating">76</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Deanston%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/w6dYRdD.png?1" target="_blank"><img src="http://i.imgur.com/w6dYRdD.png?1" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="scapa16">
-						<h2>Scapa 16</h2>
-						<p>Average Rating: <span class="rating">83</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Scapa%2016&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/1BCRecf.png" target="_blank"><img src="http://i.imgur.com/1BCRecf.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="macallan17fo">
-						<h2>Macallan 17 Fine Oak</h2>
-						<p>Average Rating: <span class="rating">91</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Macallan%2017%20Fine%20Oak&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/EMxOOuL.png" target="_blank"><img src="http://i.imgur.com/EMxOOuL.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="macallan10fo">
-						<h2>Macallan 10 Fine Oak</h2>
-						<p>Average Rating: <span class="rating">82</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Macallan%2010%20Fine%20Oak&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/1FIg3Sa.png" target="_blank"><img src="http://i.imgur.com/1FIg3Sa.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="balvenie12dw">
-						<h2>Balvenie 12 Doublewood</h2>
-						<p>Average Rating: <span class="rating">81</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2012%20Doublewood&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/XQ0cCEe.png" target="_blank"><img src="http://i.imgur.com/XQ0cCEe.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glenmorangie10o">
-						<h2>Glenmorangie 10 Original</h2>
-						<p>Average Rating: <span class="rating">82</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenmorangie%20Original%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/hODgTl0.png" target="_blank"><img src="http://i.imgur.com/hODgTl0.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="auchentoshanclassic">
-						<h2>Auchentoshan 12</h2>
-						<p>Average Rating: <span class="rating">75</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Auchentoshan%20Classic&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/xmAjLUP.png" target="_blank"><img src="http://i.imgur.com/xmAjLUP.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glenkinchie12">
-						<h2>Glenkinchie 12</h2>
-						<p>Average Rating: <span class="rating">78</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenkinchie%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/yq8VrCe.png" target="_blank"><img src="http://i.imgur.com/yq8VrCe.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="dalwhinnie15">
-						<h2>Dalwhinnie 15</h2>
-						<p>Average Rating: <span class="rating">83</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Dalwhinnie%2015&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<a href="http://i.imgur.com/C1EySTj.png?1" target="_blank"><img src="http://i.imgur.com/C1EySTj.png?1" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="tobermory10">
-						<h2>Tobermory 10</h2>
-						<p>Average Rating: <span class="rating">84</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Tobermory%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/RKnpX0a.jpg" target="_blank"><img src="http://i.imgur.com/RKnpX0a.jpg" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="bruichladdichrocks">
-						<h2>Bruichladdich Rocks</h2>
-						<p>Average Rating: <span class="rating">83</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bruichladdich%20Rocks&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/2Xm30Io.png" target="_blank"><img src="http://i.imgur.com/2Xm30Io.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="ledaig10">
-						<h2>Ledaig 10</h2>
-						<p>Average Rating: <span class="rating">84</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Ledaig%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/3B8CqOV.png" target="_blank"><img src="http://i.imgur.com/3B8CqOV.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="bruichladdichladdie">
-						<h2>Bruichladdich The Laddie 10</h2>
-						<p>Average Rating: <span class="rating">88</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bruichladdich%20The%20Laddie%20Ten&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/QQuIC5w.png" target="_blank"><img src="http://i.imgur.com/QQuIC5w.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="glenfiddich18">
-						<h2>Glenfiddich 18</h2>
-						<p>Average Rating: <span class="rating">86</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Glenfiddich%2018&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/2N9enRW.png" target="_blank"><img src="http://i.imgur.com/2N9enRW.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="cragganmore12">
-						<h2>Cragganmore 12</h2>
-						<p>Average Rating: <span class="rating">79</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Cragganmore%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/NRAm7tJ.png?1" target="_blank"><img src="http://i.imgur.com/NRAm7tJ.png?1" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="highlandpark12">
-						<h2>Highland Park 12</h2>
-						<p>Average Rating: <span class="rating">85</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Highland%20Park%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/Sz3a1nq.png?1" target="_blank"><img src="http://i.imgur.com/Sz3a1nq.png?1" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="johnniewalkerblack">
-						<h2>Johnnie Walker Black</h2>
-						<p>Average Rating: <span class="rating">80</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Johnnie%20Walker%20Black%20Label&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/Igs7mQN.png" target="_blank"><img src="http://i.imgur.com/Igs7mQN.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="bowmore12">
-						<h2>Bowmore 12</h2>
-						<p>Average Rating: <span class="rating">76</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bowmore%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/0yTUlka.png" target="_blank"><img src="http://i.imgur.com/0yTUlka.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="bruichladdichpc">
-						<h2>Bruichladdich Port Charlotte</h2>
-						<p>Average Rating: <span class="rating">93</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bruichladdich%20Port%20Charlotte%207&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/qLqoIrQ.png" target="_blank"><img src="http://i.imgur.com/qLqoIrQ.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="bruichladdichoct">
-						<h2>Bruichladdich Octomore</h2>
-						<p>Average Rating: <span class="rating">92</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&hl=en_US&f=true&noheader=true&gid=5">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/HadfcBu.png" target="_blank"><img src="http://i.imgur.com/HadfcBu.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="kilchomanpeated">
-						<h2>Kilchoman Peated</h2>
-						<p>Average Rating: <span class="rating">86</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&f=true&noheader=false&gid=8">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/NRmufzm.png" target="_blank"><img src="http://i.imgur.com/NRmufzm.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="ardbeg10">
-						<h2>Ardbeg 10</h2>
-						<p>Average Rating: <span class="rating">87</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Ardbeg%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/rMP5opn.png" target="_blank"><img src="http://i.imgur.com/rMP5opn.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="blackbottle">
-						<h2>Black Bottle</h2>
-						<p>Average Rating: <span class="rating">80</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Black%20Bottle&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/geyKEvv.png" target="_blank"><img src="http://i.imgur.com/geyKEvv.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="caolila12">
-						<h2>Caol Ila 12</h2>
-						<p>Average Rating: <span class="rating">84</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Caol%20Ila%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/wrdg7hW.png" target="_blank"><img src="http://i.imgur.com/wrdg7hW.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="laphroaig10cs">
-						<h2>Laphroaig 10 Cask Strength</h2>
-						<p>Average Rating: <span class="rating">91</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Laphroaig%2010%20Cask%20Strength&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/cJqVlgA.png" target="_blank"><img src="http://i.imgur.com/cJqVlgA.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="laphroaig10">
-						<h2>Laphroaig 10</h2>
-						<p>Average Rating: <span class="rating">85</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Laphroaig%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/nR0P5dA.png" target="_blank"><img src="http://i.imgur.com/nR0P5dA.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="smokehead">
-						<h2>Smokehead</h2>
-						<p>Average Rating: <span class="rating">78</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Smokehead&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/f2ugqKc.png" target="_blank"><img src="http://i.imgur.com/f2ugqKc.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="ardmoretradpeated">
-						<h2>Ardmore Traditional Cask Peated</h2>
-						<p>Average Rating: <span class="rating">81</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Ardmore%20Traditional%20Cask%20Peated&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/2Ds7rTC.png" target="_blank"><img src="http://i.imgur.com/2Ds7rTC.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="laphroaig18">
-						<h2>Laphroaig 18</h2>
-						<p>Average Rating: <span class="rating">90</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Laphroaig%2018&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/1qNqH5L.png" target="_blank"><img src="http://i.imgur.com/1qNqH5L.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="laphroaigqc">
-						<h2>Laphroaig Quarter Cask</h2>
-						<p>Average Rating: <span class="rating">91</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Laphroaig%20Quarter%20Cask&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/7O4wdij.png" target="_blank"><img src="http://i.imgur.com/7O4wdij.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="talisker10">
-						<h2>Talisker 10</h2>
-						<p>Average Rating: <span class="rating">87</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Talisker%2010&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/3UWhc99.png" target="_blank"><img src="http://i.imgur.com/3UWhc99.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="balveniepeated">
-						<h2>Balvenie 17 Peated Cask</h2>
-						<p>Average Rating: <span class="rating">91</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2017%20Peated%20Cask&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/9MuFHX2.png" target="_blank"><img src="http://i.imgur.com/9MuFHX2.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="benromachpeatsmoke">
-						<h2>Benromach Peat Smoke</h2>
-						<p>Average Rating: <span class="rating">88</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Benromach%20Peat%20Smoke&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/Rp7ott3.png" target="_blank"><img src="http://i.imgur.com/Rp7ott3.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="ardbegcorryvreckan">
-						<h2>Ardbeg Corryvreckan</h2>
-						<p>Average Rating: <span class="rating">92</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Ardbeg%20Corryvreckan&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/NpMjA3u.png" target="_blank"><img src="http://i.imgur.com/NpMjA3u.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="lagavulin12">
-						<h2>Lagavulin 12</h2>
-						<p>Average Rating: <span class="rating">93</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Lagavulin%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/ON77byY.png" target="_blank"><img src="http://i.imgur.com/ON77byY.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="taliskerDE">
-						<h2>Talisker Distiller's Edition</h2>
-						<p>Average Rating: <span class="rating">91</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&hl=en_US&f=true&noheader=true&gid=7">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/aZjBqrj.png" target="_blank"><img src="http://i.imgur.com/aZjBqrj.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="highlandpark18">
-						<h2>Highland Park 18</h2>
-						<p>Average Rating: <span class="rating">88</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Highland%20Park%2018&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/fhMbjkC.png" target="_blank"><img src="http://i.imgur.com/fhMbjkC.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="bunnahabhain12">
-						<h2>Bunnahabhain 12</h2>
-						<p>Average Rating: <span class="rating">86</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bunnahabhain%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/N8VaZKJ.png?1" target="_blank"><img src="http://i.imgur.com/N8VaZKJ.png?1" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="highlandpark25">
-						<h2>Highland Park 25</h2>
-						<p>Average Rating: <span class="rating">91</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Highland%20Park%2025&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/8SEmttO.png" target="_blank"><img src="http://i.imgur.com/8SEmttO.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="lagavulin16">
-						<h2>Lagavulin 16</h2>
-						<p>Average Rating: <span class="rating">89</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Lagavulin%2016&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/bPpXGLU.png" target="_blank"><img src="http://i.imgur.com/bPpXGLU.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="lagavulinDE">
-						<h2>Lagavulin Distiller's Edition</h2>
-						<p>Average Rating: <span class="rating">91</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&hl=en_US&f=true&noheader=true&gid=6">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/n44l4fp.png" target="_blank"><img src="http://i.imgur.com/n44l4fp.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="bunnahabain18">
-						<h2>Bunnahahbain 18</h2>
-						<p>Average Rating: <span class="rating">91</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bunnahabhain%2018&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/vcHX5tz.png" target="_blank"><img src="http://i.imgur.com/vcHX5tz.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="laphroaigtriplewood">
-						<h2>Laphroaig Triplewood</h2>
-						<p>Average Rating: <span class="rating">89</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Laphroaig%20Triplewood&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/ELlhae7.png" target="_blank"><img src="http://i.imgur.com/ELlhae7.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="ardbeguigeadail">
-						<h2>Ardbeg Uigeadail</h2>
-						<p>Average Rating: <span class="rating">93</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Ardbeg%20Uigeadail&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/AuquffD.png?1" target="_blank"><img src="http://i.imgur.com/AuquffD.png?1" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="bowmoredarkest">
-						<h2>Bowmore Darkest</h2>
-						<p>Average Rating: <span class="rating">72</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Bowmore%2015%20Darkest&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a>
-							<br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/P5WN3vq.png" target="_blank"><img src="http://i.imgur.com/P5WN3vq.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="balvenie15sc">
-						<h2>Balvenie 15 Single Barrel</h2>
-						<p>Average Rating: <span class="rating">89</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2015%20Single%20Barrel&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/Z50atlq.png" target="_blank"><img src="http://i.imgur.com/Z50atlq.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="balvenie21pw">
-						<h2>Balvenie 21 Portwood</h2>
-						<p>Average Rating: <span class="rating">89</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Balvenie%2021%20Portwood&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/4aDhH96.png" target="_blank"><img src="http://i.imgur.com/4aDhH96.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="dalmore12">
-						<h2>Dalmore 12</h2>
-						<p>Average Rating: <span class="rating">79</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Dalmore%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/aZbrApI.png" target="_blank"><img src="http://i.imgur.com/aZbrApI.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="jurasuperstition">
-						<h2>Jura Superstition</h2>
-						<p>Average Rating: <span class="rating">77</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Jura%20Superstition&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/n88jJZj.png" target="_blank"><img src="http://i.imgur.com/n88jJZj.png" class="wordcloud"></a>
-						</p>
-					</div>
-					<div class="info" id="chivasregal">
-						<h2>Chivas Regal</h2>
-						<p>Average Rating: <span class="rating">72</span><br>
-							<a href="https://docs.google.com/spreadsheet/lv?hl=en_US&hl=en_US&key=0AsnkEzAVwhUVdF91M3R1NFdvQWYwY1JEeHNpNnZCbVE&type=view&gid=0&f=true&colid0=0&filterstr0=Chivas%20Regal%2012&sortcolid=-1&sortasc=true&rowsperpage=10000">Scotchit Reviews</a><br>
-							Word Cloud (click to enlarge):<br>
-							<a href="http://i.imgur.com/zV96To0.png" target="_blank"><img src="http://i.imgur.com/zV96To0.png" class="wordcloud"></a>
-						</p>
-					</div>
+					<div id="info"></div>
 				</div>
 			</div>
 		</div>
+		<div id="reviewList"><table id="whiskyReviews"></table></div>
+		<div id="backgroundFade"></div>
 	</body>
 </html>
