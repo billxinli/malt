@@ -283,7 +283,7 @@
 												$('#moreinfo').css('display', 'block');
 												$('#info').empty();
 												$(whiskysList).each(function(key,value) {
-													if (window[value[1]].Name === event.currentTarget.name) {
+													if (window[value[1]].Name === event.point.name) {
 														$("#info").html("<h2>" + window[value[1]].Name + "</h2>" + "<p>Average Rating: <span class='rating'>" + window[value[1]].Rating + "</span><p class='getReviews'>Scotchit Reviews</p><p class='showOnMap'>Show on Price vs Rating chart</p>Word Cloud (click to enlarge): <br><a href='" + window[value[1]].WordCloud + "' target='_blank'><img src='" + window[value[1]].WordCloud + "' class='wordcloud'></a>");
 													}
 												});
